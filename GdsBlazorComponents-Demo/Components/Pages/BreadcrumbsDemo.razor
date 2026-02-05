@@ -1,0 +1,29 @@
+@page "/breadcrumbs"
+@using Microsoft.AspNetCore.Components.Sections
+
+<PageTitle>Breadcrumbs - GDS Components Demo</PageTitle>
+
+<GdsBreadcrumbs Items="@breadcrumbs" />
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Breadcrumbs</h1>
+
+<p class="govuk-body">
+    Use the breadcrumbs component to help users understand where they are within a website's structure and move between levels.
+</p>
+
+<h2 class="govuk-heading-l">How it works</h2>
+
+<p class="govuk-body">
+    The breadcrumbs you see at the top of this page are defined on the page itself and rendered in the layout using Blazor Sections.
+</p>
+
+
+
+@code {
+    private IReadOnlyCollection<GdsBreadcrumb> breadcrumbs = [
+        new GdsBreadcrumb("", "Home"),
+        new GdsBreadcrumb("breadcrumbs", "Breadcrumbs"),
+    ];
+}

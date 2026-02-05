@@ -1,0 +1,84 @@
+@page "/spinner"
+@rendermode InteractiveServer
+
+<PageTitle>Spinner - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Spinner</h1>
+
+<p class="govuk-body">
+    Use the spinner component to indicate that content is loading.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Basic spinner</h3>
+<div class="govuk-!-margin-bottom-6">
+
+    <GdsSpinner Show="showSpinner1" />
+    <div>
+        <button onclick="@(() => ToggleSpinner(1))" type ="button" class="govuk-button" data-module="govuk-button">
+            @(showSpinner1 ? "Hide" : "Show") Spinner
+        </button>
+    </div>
+
+</div>
+
+<h3 class="govuk-heading-m">Spinner with text</h3>
+<div class="govuk-!-margin-bottom-6">
+
+    <GdsSpinner Show="showSpinner2" ShowMessage="true" />
+
+    <div>
+        <button onclick="@(() => ToggleSpinner(2))" type="button" class="govuk-button" data-module="govuk-button">
+            @(showSpinner2 ? "Hide" : "Show") Spinner
+        </button>
+    </div>
+
+</div>
+
+<h3 class="govuk-heading-m">Simulated loading</h3>
+<div>
+        <GdsSpinner Show="isSimulatedLoading" />
+        @if (simulatedLoadComplete)
+    {
+        <GdsNotificationBanner BannerTitle="Success" BannerTitleSize="GdsNotificationBanner.BannerSizeOption.small">
+            <p class="govuk-notification-banner__heading">Processing complete!</p>
+        </GdsNotificationBanner>
+    }
+
+    <div>
+        <button onclick="@SimulateLoading" type="button" class="govuk-button" data-module="govuk-button" disabled="@isSimulatedLoading">
+            @(isSimulatedLoading ? "Processing..." : "Start Process")
+        </button>
+    </div>
+</div>
+
+@code {
+    private bool showSpinner1 = true;
+    private bool showSpinner2 = true;
+    private bool isSimulatedLoading = false;
+    private bool simulatedLoadComplete = false;
+
+    private void ToggleSpinner(int spinner)
+    {
+        if (spinner == 1)
+            showSpinner1 = !showSpinner1;
+        else if (spinner == 2)
+            showSpinner2 = !showSpinner2;
+    }
+
+    private async Task SimulateLoading()
+    {
+        isSimulatedLoading = true;
+        simulatedLoadComplete = false;
+        StateHasChanged();
+        
+        await Task.Delay(3000); // Simulate 3 second loading
+        
+        isSimulatedLoading = false;
+        simulatedLoadComplete = true;
+        StateHasChanged();
+    }
+}

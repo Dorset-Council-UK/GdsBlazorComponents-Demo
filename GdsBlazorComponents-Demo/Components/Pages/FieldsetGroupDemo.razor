@@ -1,0 +1,76 @@
+@page "/fieldset-group"
+
+<PageTitle>Fieldset Group - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Fieldset Group</h1>
+
+<p class="govuk-body">
+    Use the fieldset component to group related form inputs together.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    
+    <GdsFieldsetGroup >
+        <Heading>
+            <h2 class="govuk-fieldset__heading">What's your address?</h2>
+        </Heading>
+        <Content>
+            <GdsFormGroup For="() => model.AddressLine1">
+                <GdsLabel Text="Address Line 1" />
+                <GdsErrorMessage />
+                <GdsInputText @bind-Value="model.AddressLine1" class="govuk-input govuk-input--width-20" />
+            </GdsFormGroup>
+
+            <GdsFormGroup For="() => model.AddressLine2">
+                <GdsLabel Text="Address Line 2" />
+                <GdsErrorMessage />
+                <GdsInputText @bind-Value="model.AddressLine2" class="govuk-input govuk-input--width-20" />
+            </GdsFormGroup>
+
+            <GdsFormGroup For="() => model.City">
+                <GdsLabel Text="City" />
+                <GdsErrorMessage />
+                <GdsInputText @bind-Value="model.City" class="govuk-input govuk-input--width-20" />
+            </GdsFormGroup>
+
+            <GdsFormGroup For="() => model.Postcode">
+                <GdsLabel Text="Postcode" />
+                <GdsErrorMessage />
+                <GdsInputText @bind-Value="model.Postcode" class="govuk-input govuk-input--width-20" />
+            </GdsFormGroup>
+        </Content>
+    </GdsFieldsetGroup>
+
+    <button type="button" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">Submit</button>
+</EditForm>
+
+
+
+@code {
+    private FieldsetGroupModel model = new();
+    private bool submitted = false;
+
+    private void HandleValidSubmit()
+    {
+        submitted = true;
+    }
+
+    public class FieldsetGroupModel
+    {
+        [Required(ErrorMessage = "Enter address line 1")]
+        public string AddressLine1 { get; set; } = "";
+
+        public string? AddressLine2 { get; set; }
+
+        [Required(ErrorMessage = "Enter town or city")]
+        public string City { get; set; } = "";
+
+        [Required(ErrorMessage = "Enter postcode")]
+        public string Postcode { get; set; } = "";
+    }
+}

@@ -1,0 +1,26 @@
+@page "/label"
+
+<PageTitle>Label - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Label</h1>
+
+<p class="govuk-body">
+    Use labels to tell users what information you're asking them to provide.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default label</h3>
+<GdsLabel For="first-name" Text="First name" />
+<InputText id="first-name" class="govuk-input" @bind-Value="firstName" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Label with custom CSS classes</h3>
+
+<GdsLabel For="more-detail" Text="Can you provide more detail?" AdditionalCssClasses="govuk-label--m" />
+<textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5"></textarea>
+
+@code{
+    string firstName = "";
+}

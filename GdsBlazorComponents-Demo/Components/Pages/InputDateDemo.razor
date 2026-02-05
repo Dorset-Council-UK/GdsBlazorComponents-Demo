@@ -1,0 +1,47 @@
+@page "/input-date"
+
+<PageTitle>Input Date - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Date Input</h1>
+
+<p class="govuk-body">
+    Use the date input component to help users enter a memorable date.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+    
+    <GdsFormGroup For="() => model.DateOfBirth">
+        <GdsLabel Text="What is your date of birth" />
+        <GdsInputDate For="() => model.DateOfBirth" />
+    </GdsFormGroup>
+
+
+
+</EditForm>
+<h2 class="govuk-heading-l">Example with header and hint</h2>
+<EditForm Model="@model">
+    <GdsInputDate For="() => model.AppointmentDate">
+        <Heading>
+            <h1 class="govuk-fieldset__heading">When do you want an appointment for?</h1>
+        </Heading>
+        <Hint>For example, 12 3 2024</Hint>
+    </GdsInputDate>
+</EditForm>
+
+@code {
+    private InputDateModel model = new();
+
+    public class InputDateModel
+    {
+        [Required(ErrorMessage = "Enter your date of birth")]
+        public GdsDate DateOfBirth { get; set; } = new();
+
+        public GdsDate AppointmentDate { get; set; } = new();
+
+    }
+}

@@ -1,0 +1,31 @@
+@page "/phase-banner"
+
+<PageTitle>Phase Banner - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Phase Banner</h1>
+
+<p class="govuk-body">
+    Use the phase banner component to show users your service is still being worked on.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Alpha phase</h3>
+<GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Alpha" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Beta phase with feedback link</h3>
+<GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Beta" FeedbackLink="@feedbackLink" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">New phase with feedback link and custom text</h3>
+<GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.New" FeedbackLink="@feedbackLink" FeedbackText="super wonderful feedback" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Development phase</h3>
+<GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Development" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">No phase</h3>
+<GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.None" />
+@code{
+    Uri feedbackLink = new Uri("https://github.com/Dorset-Council-UK/GdsBlazorComponents");
+}

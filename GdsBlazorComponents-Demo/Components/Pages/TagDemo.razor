@@ -1,0 +1,103 @@
+@page "/tag"
+
+<PageTitle>Tag - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Tag</h1>
+
+<p class="govuk-body">
+    Use the tag component to show users the status of something.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default tag</h3>
+<p class="govuk-body">
+    <GdsTag Text="Completed" />
+</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Coloured tags</h3>
+<p class="govuk-body">Tags can be given different colours to help distinguish between different categories or states.</p>
+
+<table class="govuk-table govuk-!-margin-top-4">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Colour</th>
+            <th scope="col" class="govuk-table__header">Example</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Grey (default)</td>
+            <td class="govuk-table__cell"><GdsTag Text="Inactive" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Blue</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Blue" Text="New" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Turquoise</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Turquoise" Text="Active" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Green</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Green" Text="Approved" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Yellow</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Yellow" Text="Pending" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Orange</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Orange" Text="Warning" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Red</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Red" Text="Rejected" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Pink</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Pink" Text="Important" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Purple</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Purple" Text="Priority" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Light Blue</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.LightBlue" Text="Information" /></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-8">Use case example</h3>
+<p class="govuk-body">Tags are commonly used to show status in tables or lists:</p>
+
+<table class="govuk-table govuk-!-margin-top-4">
+    <caption class="govuk-table__caption govuk-table__caption--m">Application statuses</caption>
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Application ID</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">APP-001</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Green" Text="Approved" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">APP-002</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Yellow" Text="Pending" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">APP-003</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Red" Text="Rejected" /></td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">APP-004</td>
+            <td class="govuk-table__cell"><GdsTag Colour="GdsTagColour.Blue" Text="New" /></td>
+        </tr>
+    </tbody>
+</table>

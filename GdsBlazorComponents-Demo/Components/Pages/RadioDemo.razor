@@ -1,0 +1,48 @@
+@page "/radio"
+
+<PageTitle>Radio - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Radio</h1>
+
+<p class="govuk-body">
+    Individual radio button component. Usually used within a GdsRadios component.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+    <GdsFormGroup>
+        <GdsLabel>Do you agree?</GdsLabel>
+        <GdsRadios T="string" @bind-Value="model.Agreement" Label="">
+            <GdsRadio T="string" Value="yes">Yes, I agree</GdsRadio>
+            <GdsRadio T="string" Value="no">No, I don't agree</GdsRadio>
+        </GdsRadios>
+    </GdsFormGroup>
+
+    <GdsButton Type="submit">Continue</GdsButton>
+</EditForm>
+
+@if (submitted)
+{
+    <div class="govuk-!-margin-top-6">
+        <h3 class="govuk-heading-m">Form Submitted</h3>
+        <p class="govuk-body">Agreement: @model.Agreement</p>
+    </div>
+}
+
+@code {
+    private RadioModel model = new();
+    private bool submitted = false;
+
+    private void HandleValidSubmit()
+    {
+        submitted = true;
+    }
+
+    public class RadioModel
+    {
+        public string Agreement { get; set; } = "";
+    }
+}

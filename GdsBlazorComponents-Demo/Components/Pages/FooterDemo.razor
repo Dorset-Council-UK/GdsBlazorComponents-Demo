@@ -1,0 +1,33 @@
+@page "/footer"
+
+<PageTitle>Footer - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Footer</h1>
+
+<p class="govuk-body">
+    The footer component provides copyright, licensing and other information about your service.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<div style="padding:10px;border:1px solid black;">
+    <GdsFooter>
+        <Meta>
+        <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+            <a class="govuk-footer__link govuk-link-image" href="https://github.com/Dorset-Council-UK/" title="Go to the Dorset Council GitHub repository">
+                <img src="https://gistaticprod.blob.core.windows.net/static/logos/dorset-council/dc_logo_colour_with_clearance.svg" alt="Dorset Council Logo" height="150">
+            </a>
+        </div>
+        <div class="govuk-footer__meta-item">
+            <div>Copyright &copy; @(DateTimeOffset.UtcNow.Year) Dorset Council and other contributors</div>
+        </div>
+        </Meta>
+    </GdsFooter>
+</div>
+
+<p class="govuk-body govuk-!-margin-top-6">
+    <strong>Note:</strong> The footer in this demo page is shown within a bordered container for demonstration purposes. 
+    The actual footer used in this application layout is at the bottom of every page.
+</p>

@@ -1,0 +1,29 @@
+@page "/notification-banner"
+
+<PageTitle>Notification Banner - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Notification Banner</h1>
+
+<p class="govuk-body">
+    Use a notification banner to tell the user about something they need to know about, but that's not directly related to the page content.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default banner</h3>
+<GdsNotificationBanner BannerTitle="Important">
+    <p>
+        You have 7 days left to send your application.
+        <a class="govuk-notification-banner__link" href="#">View application</a>.
+    </p>
+</GdsNotificationBanner>
+
+<h3 class="govuk-heading-m">Banner with h2 heading and h3 inside content</h3>
+<GdsNotificationBanner BannerTitle="Success" BannerTitleSize="GdsNotificationBanner.BannerSizeOption.large">
+    <h3>
+        Training session scheduled
+    </h3>
+    <p class="govuk-body">We have scheduled your training session for 15 December 2024.</p>
+</GdsNotificationBanner>

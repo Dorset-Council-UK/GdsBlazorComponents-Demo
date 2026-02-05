@@ -1,0 +1,73 @@
+@page "/file-input"
+@rendermode InteractiveServer
+
+<PageTitle>File Input - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">File Input</h1>
+
+<p class="govuk-body">
+    Use the file upload component to allow users to select and upload files.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+    <GdsFormGroup For="() => model.SupportingDocuments">
+        <GdsLabel Text="Upload supporting documents" />
+        <GdsHint>Accepted file types: PDF, DOCX, JPG</GdsHint>
+        <GdsErrorMessage />
+        <GdsFileInput OnFilesSubmitted="HandleValidSubmit" />
+    </GdsFormGroup>
+
+</EditForm>
+
+<div>
+    @if(model.SupportingDocuments is not null)
+    {
+        <ul>
+            @foreach (IBrowserFile file in model.SupportingDocuments)
+            {
+                <li>@file.Name (@FormatFileSize(file.Size))</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No documents uploaded</p>
+    }
+
+</div>
+
+@code {
+    private FileInputModel model = new();
+    private bool submitted = false;
+
+    private void HandleValidSubmit(IReadOnlyList<IBrowserFile>? files)
+    {
+        //validate the files at this point
+        model.SupportingDocuments = files;
+        StateHasChanged();
+    }
+
+    private string FormatFileSize(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB" };
+        double len = bytes;
+        int order = 0;
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len = len / 1024;
+        }
+        return $"{len:0.##} {sizes[order]}";
+    }
+
+    public class FileInputModel
+    {
+        [Required(ErrorMessage = "Select some files")]
+        public IReadOnlyList<IBrowserFile>? SupportingDocuments { get; set; } = [];
+    }
+}

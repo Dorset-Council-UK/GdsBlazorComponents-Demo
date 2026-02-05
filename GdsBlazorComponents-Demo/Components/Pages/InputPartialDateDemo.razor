@@ -1,0 +1,58 @@
+@page "/input-partial-date"
+
+<PageTitle>Input Partial Date - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Input Partial Date</h1>
+
+<p class="govuk-body">
+    Use the partial date input component when users may not know or need to provide a complete date.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<p class="govuk-body">
+    This component is useful when:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Users might only know the month and year</li>
+    <li>Users might only know the year</li>
+    <li>The exact day is not required</li>
+</ul>
+
+<h3 class="govuk-heading-m">Simple example - Month and year</h3>
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+
+    <GdsFormGroup For="() => model.AppointmentDate">
+        <GdsLabel Text="Date of appointment" />
+        <GdsInputPartialDate For="() => model.AppointmentDate" ShowMonth="true" ShowYear="true" />
+    </GdsFormGroup>
+
+</EditForm>
+
+<h3 class="govuk-heading-m">Example using optional Heading and hint</h3>
+
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+
+    <GdsInputPartialDate For="() => model.YearOfThing" ShowYear="true">
+        <Heading>
+            <h1 class="govuk-fieldset__heading">What year did the thing happen?</h1>
+        </Heading>
+        <Hint>For example, 3 2024</Hint>
+    </GdsInputPartialDate>
+
+</EditForm>
+
+
+@code {
+    private PartialDateModel model = new();
+
+    public class PartialDateModel
+    {
+        public GdsDate AppointmentDate { get; set; } = new();
+        public GdsDate YearOfThing { get; set; } = new();
+    }
+}

@@ -1,0 +1,41 @@
+@page "/checkbox"
+
+<PageTitle>Checkbox - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Checkbox</h1>
+
+<p class="govuk-body">
+    Use the checkbox component to let users select one or more options.
+</p>
+<p class="govuk-body">In most cases you will want something more than a single check box, so we recommend you use the <a href="/checkboxes">GdsCheckboxes</a> component. Doing this also guarantees good HTML and accessibility.</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+@{
+    var terms_option = new GdsOptionItem<bool>("accept-terms", "I accept the terms and conditions", model.AcceptTerms, hint: "This is some hint text");
+    var emails_option = new GdsOptionItem<bool>("receive-emails", "Receive emails", model.ReceiveEmails);
+}
+
+
+<EditForm Model="@model">
+    <GdsFormGroup For="() => model">
+        <GdsCheckbox T="bool" Option="@terms_option" />
+    </GdsFormGroup>
+
+    <GdsFormGroup For="() => model">
+        <GdsCheckbox T="bool" Option="emails_option" />
+    </GdsFormGroup>
+
+</EditForm>
+
+
+@code {
+    private CheckboxModel model = new();
+
+    public class CheckboxModel
+    {
+        public bool AcceptTerms { get; set; }
+        public bool ReceiveEmails { get; set; }
+    }
+}

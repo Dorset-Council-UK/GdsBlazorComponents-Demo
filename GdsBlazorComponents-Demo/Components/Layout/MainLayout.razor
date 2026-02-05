@@ -1,0 +1,42 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<GdsSkipLink Href="@GetSkipLinkHref()" />
+
+<GdsHeader ServiceName="GDS Blazor Components Demo" ServiceUrl="/" LogoUrl="https://gistaticprod.blob.core.windows.net/static/logos/dorset-council/Dorset%20council%20logo_white_d.svg">
+</GdsHeader>
+
+<div class="govuk-width-container">
+
+    <main class="govuk-main-wrapper govuk-body" id="main-content" role="main">
+        @Body
+    </main>
+</div>
+
+<GdsFooter>
+    <Meta>
+    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <a class="govuk-footer__link govuk-link-image" href="https://github.com/Dorset-Council-UK/" title="Go to the Dorset Council GitHub repository">
+            <img src="https://gistaticprod.blob.core.windows.net/static/logos/dorset-council/dc_logo_colour_with_clearance.svg" alt="Dorset Council Logo" height="150">
+        </a>
+    </div>
+    <div class="govuk-footer__meta-item">
+        <div>Copyright &copy; @(DateTimeOffset.UtcNow.Year) Dorset Council and other contributors</div>
+    </div>
+    </Meta>
+</GdsFooter>
+
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private string GetSkipLinkHref()
+    {
+        var currentUri = new Uri(NavigationManager.Uri);
+        return $"{currentUri.GetLeftPart(UriPartial.Path)}#main-content";
+    }
+}

@@ -1,0 +1,98 @@
+@page "/radios"
+
+<PageTitle>Radios - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Radios</h1>
+
+<p class="govuk-body">
+    Use the radios component when users can only select one option from a list.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+
+    <h3 class="govuk-heading-m">Standard radios</h3>
+    <GdsFormGroup For="() => model.ContactPreference">
+        <InputRadioGroup @bind-Value="model.ContactPreference">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <h2 class="govuk-fieldset__heading">How would you prefer to be contacted?</h2>
+                </Heading>
+                <Content>
+                    <GdsHint>Select one option</GdsHint>
+                    <GdsErrorMessage />
+                    <GdsRadios Options="@contactOptions" />
+                </Content>
+            </GdsFieldsetGroup>
+        </InputRadioGroup>
+    </GdsFormGroup>
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-8">Inline radios</h3>
+    <GdsFormGroup For="() => model.DeliveryMethod">
+        <InputRadioGroup @bind-Value="model.DeliveryMethod">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <legend class="govuk-fieldset__legend">How should we deliver your order?</legend>
+                </Heading>
+                <Content>
+                    <GdsRadios T="string" Options="@deliveryOptions" Inline="true" />
+                </Content>
+            </GdsFieldsetGroup>
+        </InputRadioGroup>
+    </GdsFormGroup>
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-8">Smaller radios</h3>
+    <GdsFormGroup For="() => model.Confirmed">
+        <InputRadioGroup @bind-Value="model.Confirmed">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <legend class="govuk-fieldset__legend">Have you confirmed the details?</legend>
+                </Heading>
+                <Content>
+                    <GdsRadios Options="@yesNoOptions" Smaller="true" />
+                </Content>
+            </GdsFieldsetGroup>
+        </InputRadioGroup>
+    </GdsFormGroup>
+
+</EditForm>
+
+
+@code {
+    private RadiosModel model = new();
+
+    private IReadOnlyCollection<GdsOptionItem<int>> contactOptions = [
+        new ("contactPhone", "Phone", 1, false, false, "We'll call you during business hours"),
+        new ("contactEmail", "Email", 2, false, false, "We'll send you a confirmation email"),
+        new ("contactText", "Text message", 3, false, false, "We'll send you a text message"),
+        new ("contactPost", "Post", 4),
+    ];
+
+    private IReadOnlyCollection<GdsOptionItem<string>> deliveryOptions = [
+        new ("deliveryStandard", "Standard delivery", "standard"),
+        new ("deliveryExpress", "Express delivery", "express"),
+        new ("deliveryCollect", "Click and collect", "collect"),
+    ];
+
+    private IReadOnlyCollection<GdsOptionItem<bool>> yesNoOptions = [
+        new ("confirmedYes", "Yes", true),
+        new ("confirmedNo", "No", false),
+    ];
+
+    
+
+    public class RadiosModel
+    {
+        [Required(ErrorMessage = "Select how you would prefer to be contacted")]
+        public int ContactPreference { get; set; }
+
+        [Required(ErrorMessage = "Select a delivery method")]
+        public string DeliveryMethod { get; set; } = "";
+
+        public bool Confirmed { get; set; }
+    }
+}

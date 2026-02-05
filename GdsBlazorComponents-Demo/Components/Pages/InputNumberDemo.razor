@@ -1,0 +1,70 @@
+@page "/input-number"
+
+<PageTitle>Input Number - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Number Input</h1>
+
+<p class="govuk-body">
+    Use the number input component when you need users to enter a number. The GOV.UK Design System defines two types: asking for whole numbers and asking for decimal numbers.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<EditForm Model="@model">
+    <DataAnnotationsValidator />
+
+    <h3 class="govuk-heading-m">Whole number example</h3>
+    <GdsFormGroup For="() => model.AccountNumberText" Id="account-number">
+        <GdsLabel Text="What is your account number?" />
+        <GdsHint>Must be between 6 and 8 digits long</GdsHint>
+        <GdsErrorMessage />
+        <GdsInputNumber @bind-Value=model.AccountNumberText @bind-NumberValue=model.AccountNumber class="govuk-input govuk-input--width-10" />
+    </GdsFormGroup>
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-8">Decimal number with suffix</h3>
+    <GdsFormGroup For="() => model.WeightText" Id="weight">
+        <GdsLabel Text="How much does it weigh?" />
+        <GdsHint>Weight, in kilograms</GdsHint>
+        <GdsErrorMessage />
+        <div class="govuk-input__wrapper">
+            <GdsInputNumber @bind-Value=model.WeightText @bind-NumberValue=model.Weight class="govuk-input govuk-input--width-5" />
+            <div class="govuk-input__suffix" aria-hidden="true">kg</div>
+        </div>
+    </GdsFormGroup>
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-8">Decimal number with prefix</h3>
+    <GdsFormGroup For="() => model.AmountText" Id="amount">
+        <GdsLabel Text="What is the amount?" />
+        <GdsHint>Enter the amount in pounds</GdsHint>
+        <GdsErrorMessage />
+        <div class="govuk-input__wrapper">
+            <div class="govuk-input__prefix" aria-hidden="true">£</div>
+            <GdsInputNumber @bind-Value=model.AmountText @bind-NumberValue=model.Amount class="govuk-input govuk-input--width-5" />
+        </div>
+    </GdsFormGroup>
+
+</EditForm>
+
+
+@code {
+    private InputNumberModel model = new();
+
+    public class InputNumberModel
+    {
+        public string? AccountNumberText { get; set; }
+
+        [Range(100000, 99999999, ErrorMessage = "Account number must be between 6 and 8 digits")]
+        public int? AccountNumber { get; set; }
+
+        public string? WeightText { get; set; }
+        public float? Weight { get; set; }
+
+        public string? AmountText { get; set; }
+
+        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than zero")]
+        public float? Amount { get; set; }
+    }
+}
+

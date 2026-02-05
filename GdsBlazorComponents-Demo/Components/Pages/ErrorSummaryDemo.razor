@@ -1,0 +1,81 @@
+@page "/error-summary"
+
+<PageTitle>Error Summary - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Error Summary</h1>
+
+<p class="govuk-body">
+    Use the error summary component at the top of a page to summarise any validation errors.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<p class="govuk-body">Submit the form with invalid values to see <a href="/error-message">inline error messages</a> and an error summary</p>
+
+<EditForm EditContext="editContext" OnValidSubmit="@HandleValidSubmit" FormName="ErrorSummaryExampleForm">
+    <DataAnnotationsValidator />
+    <GdsErrorSummary />
+    
+    <GdsFormGroup For="() => model.FullName">
+        <GdsLabel Text="What is your full name?" />
+        <GdsErrorMessage />
+        <GdsInputText @bind-Value="model.FullName" class="govuk-input govuk-input--width-20" />
+    </GdsFormGroup>
+
+    <GdsFormGroup For="() => model.Email">
+        <GdsLabel Text="What is your email address?" />
+        <GdsErrorMessage />
+        <GdsInputText @bind-Value="model.Email" class="govuk-input govuk-input--width-20" />
+    </GdsFormGroup>
+
+    <GdsFormGroup For="() => model.Age">
+        <GdsLabel Text="What is your age?" />
+        <GdsErrorMessage />
+        <GdsInputNumber @bind-Value="model.AgeText" NumberValue="model.Age" class="govuk-input govuk-input--width-3" />
+    </GdsFormGroup>
+
+    <button type="submit" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">Submit</button>
+
+</EditForm>
+
+@if (submitted)
+{
+    <GdsNotificationBanner BannerTitle="Form submitted successfully">
+        This is in a notification, just cos'
+    </GdsNotificationBanner>
+}
+
+@code {
+    private ErrorSummaryModel model = new();
+    private EditContext? editContext;
+    private bool submitted = false;
+
+    protected override void OnInitialized()
+    {
+        model ??= new();
+        editContext = new(model);
+        editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+    }
+
+    private void HandleValidSubmit()
+    {
+        submitted = true;
+    }
+
+    public class ErrorSummaryModel
+    {
+        [Required(ErrorMessage = "Enter your full name")]
+        public string FullName { get; set; } = "";
+
+        [Required(ErrorMessage = "Enter your email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        public string Email { get; set; } = "";
+
+        public string? AgeText{ get; set; }
+
+        [Required(ErrorMessage = "Enter your age")]
+        public int? Age { get; set; }
+    }
+}

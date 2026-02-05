@@ -1,0 +1,98 @@
+@page "/checkboxes"
+@rendermode InteractiveServer
+
+<PageTitle>Checkboxes - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Checkboxes</h1>
+
+<p class="govuk-body">
+    Use the checkboxes component when you want users to select multiple options from a list.
+</p>
+
+
+    <EditForm EditContext="_editContext" FormName="CheckboxesDemo">
+        <DataAnnotationsValidator />
+
+        <h2 class="govuk-heading-l">Standard checkboxes</h2>
+        <GdsFormGroup For="() => model.ContactTypes" Id="contact-types-group">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <h4 class="govuk-fieldset__heading">How can we contact you?</h4>
+                </Heading>
+                <Content>
+                    <GdsHint>Select all that apply.</GdsHint>
+                    <GdsErrorMessage />
+                    <GdsCheckboxes Options="@contactTypeOptions" Name="ContactTypes" />
+                </Content>
+            </GdsFieldsetGroup>
+        </GdsFormGroup>
+
+        <h2 class="govuk-heading-l">Smaller checkboxes</h2>
+        <GdsFormGroup For="() => model.Interests" Id="interests-group">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <h4 class="govuk-fieldset__heading">What are your interests?</h4>
+                </Heading>
+                <Content>
+                    <GdsCheckboxes T="string" Options="@interestOptions" Smaller="true" Name="Interests" />
+                </Content>
+            </GdsFieldsetGroup>
+        </GdsFormGroup>
+
+        <h2 class="govuk-heading-l">Checkboxes with exclusive behaviour</h2>
+        <GdsFormGroup For="() => model.Countries" Id="countries-group">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <h4 class="govuk-fieldset__heading">Will you be travelling to any of these countries?</h4>
+                </Heading>
+                <Content>
+                    <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" />
+                </Content>
+            </GdsFieldsetGroup>
+        </GdsFormGroup>
+
+    </EditForm>
+
+@code {
+    private CheckboxesModel model = new();
+    private EditContext _editContext = default!;
+
+    private IReadOnlyCollection<GdsOptionItem<int>> contactTypeOptions = [
+        new ("contactTypePhone", "Phone", 1),
+        new ("contactTypeEmail", "Email", 2),
+        new ("contactTypeText", "Text message", 3),
+        new ("contactTypePost", "Post", 4),
+    ];
+
+    private IReadOnlyCollection<GdsOptionItem<string>> interestOptions = [
+        new ("interestTechnology", "Technology", "technology"),
+        new ("interestScience", "Science", "science"),
+        new ("interestArts", "Arts and culture", "arts"),
+        new ("interestSports", "Sports", "sports"),
+        new ("interestTravel", "Travel", "travel"),
+    ];
+
+    private IReadOnlyCollection<GdsOptionItem<string>> countryOptions = [
+        new ("countryFrance", "France", "france"),
+        new ("countryPortugal", "Portugal", "portugal"),
+        new ("countrySpain", "Spain", "spain"),
+        new ("countryNone", "No, I will not be travelling to any of these countries", "none", isExclusive: true),
+    ];
+
+    protected override void OnInitialized()
+    {
+        // Setup model and edit context
+        model ??= new();
+        _editContext = new(model);
+        _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+    }
+
+    public class CheckboxesModel
+    {
+        public List<int>? ContactTypes { get; set; }
+        public List<string>? Interests { get; set; }
+        public List<string>? Countries { get; set; }
+    }
+}

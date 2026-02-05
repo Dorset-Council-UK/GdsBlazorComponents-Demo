@@ -1,0 +1,28 @@
+@page "/hint"
+
+<PageTitle>Hint - GDS Components Demo</PageTitle>
+
+<a class="govuk-back-link" href="/">Back to home</a>
+
+<h1 class="govuk-heading-xl">Hint</h1>
+
+<p class="govuk-body">
+    Use hint text to help users understand what information they need to provide. The hint text normally appears beneath a label and above the input.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">With text input</h3>
+<div class="govuk-form-group">
+    <GdsLabel Text="National Insurance number" For="ni-number"></GdsLabel>
+    <GdsHint>
+        It's on your National Insurance card, benefit letter, payslip or P60.
+        For example, 'QQ 12 34 56 C'.
+    </GdsHint>
+    <input class="govuk-input govuk-input--width-10" type="text" id="ni-number"/>
+</div>
+
+<h3 class="govuk-heading-m">Standalone hint</h3>
+<GdsHint>
+    This is a standalone hint that can be used independently.
+</GdsHint>
