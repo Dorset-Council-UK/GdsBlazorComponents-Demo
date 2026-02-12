@@ -19,7 +19,7 @@
     </HeaderContent>
     <RowTemplate Context="item">
         <GdsTableTd Value="@item.Date" Format="MMMM" />
-        <GdsTableTd Value="@item.Amount" Format="C0" Numeric />
+        <GdsTableTd Value="@item.Amount" Format="C0" FormatProvider="formatProvider" Numeric />
     </RowTemplate>
 </GdsTable>
 
@@ -45,7 +45,7 @@
 
 @code {
     private record Payment(DateTime Date, int Amount);
-
+    private IFormatProvider formatProvider = new System.Globalization.CultureInfo("en-GB");
     private Payment[] Payments { get; set; } = [
         new(new DateTime(2026, 1, 1), 95),
         new(new DateTime(2026, 2, 1), 55),
