@@ -36,3 +36,15 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* Adjustments for Dorset Council */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* Fill the space when the parent is flex */
+.flex-fill {
+    flex: 1;
+    width: 100%;
+}
