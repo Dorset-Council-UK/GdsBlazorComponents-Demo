@@ -1,0 +1,37 @@
+﻿@rendermode InteractiveServer
+@page "/select"
+
+<PageTitle>Select - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/"></GdsBackLink>
+
+<h1 class="govuk-heading-xl">Select</h1>
+
+<p class="govuk-body">
+    This component allows you to add select elements to any part of your Blazor application using the GDS recommendations.
+</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<GdsSelect Options="@ContactTypes" OnChange="@OnContactTypeChange" />
+<span id="result-body">@Result</span>
+
+@code {
+    private string Result = string.Empty;
+    private IReadOnlyCollection<GdsOptionItem<int>> ContactTypes = [
+        new ("contactTypeNone", "Select an option", 0),
+        new ("contactTypePhone", "Phone", 1),
+        new ("contactTypeEmail", "Email", 2),
+        new ("contactTypeText", "Text message", 3),
+        new ("contactTypePost", "Post", 4),
+    ];
+
+    private void OnContactTypeChange(ChangeEventArgs e)
+    {
+        // Do something when the select value changes
+        var selectedValue = e.Value?.ToString();
+        var selectedLabel = ContactTypes.FirstOrDefault(ct => ct.Value.ToString() == selectedValue)?.Label;
+        Result = $"Selected contact type: {selectedValue} - {selectedLabel}";
+        StateHasChanged();
+    }
+}
