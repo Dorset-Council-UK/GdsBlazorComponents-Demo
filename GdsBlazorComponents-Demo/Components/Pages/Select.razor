@@ -13,7 +13,7 @@
 
 <h2 class="govuk-heading-l">Examples</h2>
 
-<GdsSelect Options="@ContactTypes" OnChange="@OnContactTypeChange" />
+<GdsSelect Options="@ContactTypes" T="int" OnChange="OnContactTypeChange" />
 <span id="result-body">@Result</span>
 
 @code {
@@ -26,12 +26,9 @@
         new ("contactTypePost", "Post", 4),
     ];
 
-    private void OnContactTypeChange(ChangeEventArgs e)
+    private async Task OnContactTypeChange(GdsOptionItem<int> option)
     {
         // Do something when the select value changes
-        var selectedValue = e.Value?.ToString();
-        var selectedLabel = ContactTypes.FirstOrDefault(ct => ct.Value.ToString() == selectedValue)?.Label;
-        Result = $"Selected contact type: {selectedValue} - {selectedLabel}";
-        StateHasChanged();
+        Result = $"Selected contact type: {option.Value} - {option.Label}";
     }
 }
