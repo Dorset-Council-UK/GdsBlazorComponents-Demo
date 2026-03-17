@@ -1,0 +1,30 @@
+@page "/accordion"
+
+<PageTitle>Accordion - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/"></GdsBackLink>
+
+<h1 class="govuk-heading-xl">Accordion</h1>
+
+<GdsWarning Text="This component is not yet ready for use in production." />
+
+<p class="govuk-body">
+    The accordion component lets users show and hide sections of related content on a page.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+
+<GdsAccordion Id="accordion-test">
+    <GdsAccordionSection>
+        <Header>Writing well for the web</Header>
+        <Content>
+            <p class="govuk-body">This is the content for Writing well for the web.</p>
+        </Content>
+    </GdsAccordionSection>
+    <GdsAccordionSection>
+        <Header>Writing well for specialists</Header>
+        <Content>
+            <p class="govuk-body">This is the content for Writing well for specialists.</p>
+        </Content>
+    </GdsAccordionSection>
+</GdsAccordion>
