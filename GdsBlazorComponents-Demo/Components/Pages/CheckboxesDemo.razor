@@ -3,7 +3,7 @@
 
 <PageTitle>Checkboxes - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <h1 class="govuk-heading-xl">Checkboxes</h1>
 
@@ -11,49 +11,51 @@
     Use the checkboxes component when you want users to select multiple options from a list.
 </p>
 
+<EditForm EditContext="_editContext" FormName="CheckboxesDemo">
+    <DataAnnotationsValidator />
 
-    <EditForm EditContext="_editContext" FormName="CheckboxesDemo">
-        <DataAnnotationsValidator />
+    <h2 class="govuk-heading-l">Standard checkboxes</h2>
+    <GdsFormGroup For="() => model.ContactTypes" Id="contact-types-group">
+        <GdsFieldsetGroup>
+            <Heading>
+                <h4 class="govuk-fieldset__heading">How can we contact you?</h4>
+            </Heading>
+            <Content>
+                <GdsHint>Select all that apply.</GdsHint>
+                <GdsErrorMessage />
+                <GdsCheckboxes T="int" Options="@contactTypeOptions" Name="ContactTypes" OnChanged="OnContactTypesChanged" />
+            </Content>
+        </GdsFieldsetGroup>
+        <p class="govuk-body">Selected contact types: @string.Join(", ", model.ContactTypes)</p>
+    </GdsFormGroup>
 
-        <h2 class="govuk-heading-l">Standard checkboxes</h2>
-        <GdsFormGroup For="() => model.ContactTypes" Id="contact-types-group">
-            <GdsFieldsetGroup>
-                <Heading>
-                    <h4 class="govuk-fieldset__heading">How can we contact you?</h4>
-                </Heading>
-                <Content>
-                    <GdsHint>Select all that apply.</GdsHint>
-                    <GdsErrorMessage />
-                    <GdsCheckboxes Options="@contactTypeOptions" Name="ContactTypes" />
-                </Content>
-            </GdsFieldsetGroup>
-        </GdsFormGroup>
+    <h2 class="govuk-heading-l">Smaller checkboxes</h2>
+    <GdsFormGroup For="() => model.Interests" Id="interests-group">
+        <GdsFieldsetGroup>
+            <Heading>
+                <h4 class="govuk-fieldset__heading">What are your interests?</h4>
+            </Heading>
+            <Content>
+                <GdsCheckboxes T="string" Options="@interestOptions" Name="Interests" Smaller OnChanged="OnInterestsChanged" />
+            </Content>
+        </GdsFieldsetGroup>
+        <p class="govuk-body">Selected interests: @string.Join(", ", model.Interests)</p>
+    </GdsFormGroup>
 
-        <h2 class="govuk-heading-l">Smaller checkboxes</h2>
-        <GdsFormGroup For="() => model.Interests" Id="interests-group">
-            <GdsFieldsetGroup>
-                <Heading>
-                    <h4 class="govuk-fieldset__heading">What are your interests?</h4>
-                </Heading>
-                <Content>
-                    <GdsCheckboxes T="string" Options="@interestOptions" Smaller="true" Name="Interests" />
-                </Content>
-            </GdsFieldsetGroup>
-        </GdsFormGroup>
+    <h2 class="govuk-heading-l">Checkboxes with exclusive behaviour</h2>
+    <GdsFormGroup For="() => model.Countries" Id="countries-group">
+        <GdsFieldsetGroup>
+            <Heading>
+                <h4 class="govuk-fieldset__heading">Will you be travelling to any of these countries?</h4>
+            </Heading>
+            <Content>
+                <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" OnChanged="OnCountriesChanged" />
+            </Content>
+        </GdsFieldsetGroup>
+        <p class="govuk-body">Selected countries: @string.Join(", ", model.Countries)</p>
+    </GdsFormGroup>
 
-        <h2 class="govuk-heading-l">Checkboxes with exclusive behaviour</h2>
-        <GdsFormGroup For="() => model.Countries" Id="countries-group">
-            <GdsFieldsetGroup>
-                <Heading>
-                    <h4 class="govuk-fieldset__heading">Will you be travelling to any of these countries?</h4>
-                </Heading>
-                <Content>
-                    <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" />
-                </Content>
-            </GdsFieldsetGroup>
-        </GdsFormGroup>
-
-    </EditForm>
+</EditForm>
 
 @code {
     private CheckboxesModel model = new();
@@ -83,16 +85,67 @@
 
     protected override void OnInitialized()
     {
-        // Setup model and edit context
-        model ??= new();
         _editContext = new(model);
         _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+
+        // Update checkbox options from model
+        foreach (var option in contactTypeOptions)
+        {
+            option.Selected = model.ContactTypes.Contains(option.Value);
+        }
+        foreach (var option in interestOptions)
+        {
+            option.Selected = model.Interests.Contains(option.Value);
+        }
+        foreach (var option in countryOptions)
+        {
+            option.Selected = model.Countries.Contains(option.Value);
+        }
+    }
+
+    // Update model from checkbox option
+    private void OnContactTypesChanged(GdsOptionItem<int> option)
+    {
+        if (option.Selected)
+        {
+            model.ContactTypes.Add(option.Value);
+        }
+        else
+        {
+            model.ContactTypes.Remove(option.Value);
+        }
+    }
+
+    // Update model from checkbox option
+    private void OnInterestsChanged(GdsOptionItem<string> option)
+    {
+        if (option.Selected)
+        {
+            model.Interests.Add(option.Value);
+        }
+        else
+        {
+            model.Interests.Remove(option.Value);
+        }
+    }
+
+    // Update model from checkbox option
+    private void OnCountriesChanged(GdsOptionItem<string> option)
+    {
+        if (option.Selected)
+        {
+            model.Countries.Add(option.Value);
+        }
+        else
+        {
+            model.Countries.Remove(option.Value);
+        }
     }
 
     public class CheckboxesModel
     {
-        public List<int>? ContactTypes { get; set; }
-        public List<string>? Interests { get; set; }
-        public List<string>? Countries { get; set; }
+        public List<int> ContactTypes { get; set; } = [];
+        public List<string> Interests { get; set; } = [];
+        public List<string> Countries { get; set; } = [];
     }
 }

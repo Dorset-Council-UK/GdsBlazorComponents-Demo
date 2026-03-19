@@ -1,37 +1,48 @@
+@rendermode InteractiveServer
 @page "/checkbox"
 
 <PageTitle>Checkbox - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <h1 class="govuk-heading-xl">Checkbox</h1>
 
 <p class="govuk-body">
     Use the checkbox component to let users select one or more options.
 </p>
-<p class="govuk-body">In most cases you will want something more than a single check box, so we recommend you use the <a href="/checkboxes">GdsCheckboxes</a> component. Doing this also guarantees good HTML and accessibility.</p>
+<p class="govuk-body">In most cases you will want something more than a single check box, so we recommend you use the <a href="/checkboxes" class="govuk-link">GdsCheckboxes</a> component. Doing this also guarantees good HTML and accessibility.</p>
 
 <h2 class="govuk-heading-l">Example</h2>
-@{
-    var terms_option = new GdsOptionItem<bool>("accept-terms", "I accept the terms and conditions", model.AcceptTerms, hint: "This is some hint text");
-    var emails_option = new GdsOptionItem<bool>("receive-emails", "Receive emails", model.ReceiveEmails);
-}
-
 
 <EditForm Model="@model">
     <GdsFormGroup For="() => model">
-        <GdsCheckbox T="bool" Option="@terms_option" />
+        <GdsCheckbox T="bool" Option="@terms_option" Name="AcceptTerms" OnChanged="OnTermsChanged" />
     </GdsFormGroup>
 
     <GdsFormGroup For="() => model">
-        <GdsCheckbox T="bool" Option="emails_option" />
+        <GdsCheckbox T="bool" Option="emails_option" OnChanged="OnReceiveEmailsChanged" />
     </GdsFormGroup>
-
 </EditForm>
 
+<p class="govuk-body">
+    <div>Terms accepted: @model.AcceptTerms</div>
+    <div>Receive emails: @model.ReceiveEmails</div>
+</p>
 
 @code {
     private CheckboxModel model = new();
+    private GdsOptionItem<bool> terms_option = new("accept-terms", "I accept the terms and conditions", value: false, hint: "This is some hint text");
+    private GdsOptionItem<bool> emails_option = new("receive-emails", "Receive emails", value: false);
+
+    // Update model from checkbox option
+    private void OnTermsChanged(GdsOptionItem<bool> option) => model.AcceptTerms = option.Selected;
+    private void OnReceiveEmailsChanged(GdsOptionItem<bool> option) => model.ReceiveEmails = option.Selected;
+
+    protected override void OnInitialized()
+    {
+        terms_option.Selected = model.AcceptTerms;
+        emails_option.Selected = model.ReceiveEmails;
+    }
 
     public class CheckboxModel
     {
