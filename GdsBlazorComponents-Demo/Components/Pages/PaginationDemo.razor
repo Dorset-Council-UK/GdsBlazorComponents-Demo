@@ -24,13 +24,13 @@
                 <div>Total pages: @_model.TotalPages</div>
             </div>
 
-            <GdsPagination BlockStyle="@_model.UseBlockStyle"
-                           CurrentPage="@_model.CurrentPage"
-                           HrefGenerator="@PageHref"
-                           NextLabel="Driver CPC part 1 test: theory"
+            <GdsPagination CurrentPage="@_model.CurrentPage"
+                           TotalPages="@_model.TotalPages"
+                           HrefGenerator="@(pageNumber => NavigationManager.Uri)"
                            OnPageChanged="@OnPageChanged"
-                           PreviousLabel="Applying for a provisional lorry or bus licence"
-                           TotalPages="@_model.TotalPages" />
+                           PreviousLabel="@_previousLabel"
+                           NextLabel="@_nextLabel"
+                           BlockStyle="@_model.UseBlockStyle" />
         </div>
 
         <div class="govuk-grid-column-one-third">
@@ -42,7 +42,7 @@
                         </Heading>
                         <Content>
                             <GdsErrorMessage />
-                            <GdsCheckboxes Options="@_options" Name="options" Smaller />
+                            <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
                         </Content>
                     </GdsFieldsetGroup>
                 </GdsFormGroup>
@@ -57,32 +57,27 @@
     </div>
 }
 
-
 @code {
     [Inject]
     private NavigationManager NavigationManager { get; set; } = default!;
 
-    [SupplyParameterFromQuery(Name = "page")]
-    private int? CurrentPageQuery { get; set; }
-
     private PaginationDemoModel? _model;
     private EditContext? _editContext;
+    private string? _previousLabel;
+    private string? _nextLabel;
 
     private IReadOnlyCollection<GdsOptionItem<int>> _totalPagesOptions = [
-        new ("total-pages-zero", "0", 0),
         new ("total-pages-three", "3", 3),
         new ("total-pages-five", "5", 5),
         new ("total-pages-ten", "10", 10),
         new ("total-pages-twenty", "20", 20),
-        new ("total-pages-fourtytwo", "42", 42, selected: true),
+        new ("total-pages-forty-two", "42", 42, selected: true),
         new ("total-pages-fifty", "50", 50),
-        new ("total-pages-onehundred", "100", 100),
+        new ("total-pages-one-hundred", "100", 100),
     ];
 
-    private IReadOnlyCollection<GdsOptionItem<bool>> _options = [
-        new("use-block-style", "Block style", value: true),
-        new("use-block-labels", "Use labels", value: true, hint: "with block style"),
-    ];
+    private GdsOptionItem<bool> _optionUseBlockStyle = new("use-block-style", "Block style", value: true);
+    private GdsOptionItem<bool> _optionUseBlockLabels = new("use-block-labels", "Use labels", value: true, hint: "with block style");
 
     protected override void OnInitialized()
     {
@@ -90,37 +85,20 @@
         {
             _model = new()
             {
-                CurrentPage = CurrentPageQuery ?? 7,
+                CurrentPage = 7,
                 TotalPages = 42,
 
                 // options
                 UseBlockStyle = false,
-                UseLabels = false,
+                UseLabels = true,
             };
             _editContext = new(_model);
             _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+
+            _optionUseBlockStyle.Selected = _model.UseBlockStyle;
+            _optionUseBlockLabels.Selected = _model.UseLabels;
+            UpdateLabels();
         }
-    }
-
-    protected override void OnParametersSet()
-    {
-        if (_model is not null)
-        {
-            if (CurrentPageQuery.HasValue)
-            {
-                // _model.CurrentPage = CurrentPageQuery.Value;
-            }
-
-            // _styleOption.Selected = _model.BlockStyle;
-        }
-    }
-
-    private string PageHref(int pageNumber)
-    {
-        return NavigationManager.GetUriWithQueryParameters(new Dictionary<string, object?>
-        {
-            ["page"] = pageNumber,
-        });
     }
 
     private Task OnPageChanged(int pageNumber)
@@ -130,6 +108,7 @@
             _model.CurrentPage = pageNumber;
             // Search your API for new results ...
         }
+        UpdateLabels();
 
         return Task.CompletedTask;
     }
@@ -144,8 +123,42 @@
                 _model.CurrentPage = _model.TotalPages;
             }
         }
+        UpdateLabels();
 
         return Task.CompletedTask;
+    }
+
+    // update model from options
+    private Task OnChangedOptions(GdsOptionItem<bool> option)
+    {
+        if (_model is not null)
+        {
+            if (option.Id == _optionUseBlockStyle.Id)
+            {
+                _model.UseBlockStyle = option.Selected;
+            }
+            else if (option.Id == _optionUseBlockLabels.Id)
+            {
+                _model.UseLabels = option.Selected;
+            }
+            UpdateLabels();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void UpdateLabels()
+    {
+        if (_model is not null && _model.UseBlockStyle && _model.UseLabels)
+        {
+            _previousLabel = $"A previous page (goto page {_model.CurrentPage - 1})";
+            _nextLabel = $"A next page (goto page {_model.CurrentPage + 1})";
+        }
+        else
+        {
+            _previousLabel = null;
+            _nextLabel = null;
+        }
     }
 
     private class PaginationDemoModel
