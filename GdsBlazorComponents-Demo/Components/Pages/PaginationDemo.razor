@@ -5,7 +5,7 @@
 
 <GdsBackLink Href="/" />
 
-<h1 class="govuk-heading-xl">Accordion</h1>
+<h1 class="govuk-heading-xl">Pagination</h1>
 
 <GdsWarning Text="This component is not yet ready for use in production." />
 
@@ -151,8 +151,8 @@
     {
         if (_model is not null && _model.UseBlockStyle && _model.UseLabels)
         {
-            _previousLabel = $"A previous page (goto page {_model.CurrentPage - 1})";
-            _nextLabel = $"A next page (goto page {_model.CurrentPage + 1})";
+            _previousLabel = $"A previous page (go to page {_model.CurrentPage - 1})";
+            _nextLabel = $"A next page (go to page {_model.CurrentPage + 1})";
         }
         else
         {

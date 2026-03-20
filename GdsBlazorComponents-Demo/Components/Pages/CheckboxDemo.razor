@@ -20,14 +20,14 @@
     </GdsFormGroup>
 
     <GdsFormGroup For="() => model">
-        <GdsCheckbox T="bool" Option="emails_option" OnChanged="OnReceiveEmailsChanged" />
+        <GdsCheckbox T="bool" Option="@emails_option" Name="ReceiveEmails" OnChanged="OnReceiveEmailsChanged" />
     </GdsFormGroup>
 </EditForm>
 
-<p class="govuk-body">
+<div class="govuk-body">
     <div>Terms accepted: @model.AcceptTerms</div>
     <div>Receive emails: @model.ReceiveEmails</div>
-</p>
+</div>
 
 @code {
     private CheckboxModel model = new();

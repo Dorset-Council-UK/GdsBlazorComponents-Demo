@@ -26,7 +26,7 @@
         new ("contactTypePost", "Post", 4),
     ];
 
-    private async Task OnContactTypeChange(GdsOptionItem<int> option)
+    private void OnContactTypeChange(GdsOptionItem<int> option)
     {
         // Do something when the select value changes
         Result = $"Selected contact type: {option.Value} - {option.Label}";
