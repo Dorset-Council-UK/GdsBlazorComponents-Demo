@@ -2,7 +2,7 @@
 
 <PageTitle>Fieldset Group - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <h1 class="govuk-heading-xl">Fieldset Group</h1>
 
@@ -12,10 +12,10 @@
 
 <h2 class="govuk-heading-l">Example</h2>
 
-<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit" FormName="FieldsetGroup">
     <DataAnnotationsValidator />
     
-    <GdsFieldsetGroup >
+    <GdsFieldsetGroup>
         <Heading>
             <h2 class="govuk-fieldset__heading">What's your address?</h2>
         </Heading>
@@ -46,10 +46,19 @@
         </Content>
     </GdsFieldsetGroup>
 
-    <button type="button" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">Submit</button>
+    <GdsButton PreventDoubleClick="@true">Submit</GdsButton>
 </EditForm>
 
-
+@if (submitted)
+{
+    <div class="govuk-!-margin-top-6">
+        <h3 class="govuk-heading-m">Form Submitted</h3>
+        <p class="govuk-body">Line 1: @model.AddressLine1</p>
+        <p class="govuk-body">Line 2: @model.AddressLine2</p>
+        <p class="govuk-body">City: @model.City</p>
+        <p class="govuk-body">Postcode: @model.Postcode</p>
+    </div>
+}
 
 @code {
     private FieldsetGroupModel model = new();

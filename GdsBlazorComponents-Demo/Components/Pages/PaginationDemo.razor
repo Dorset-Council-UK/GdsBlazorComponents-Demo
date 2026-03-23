@@ -1,0 +1,176 @@
+@rendermode InteractiveServer
+@page "/pagination"
+
+<PageTitle>Pagination - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<h1 class="govuk-heading-xl">Pagination</h1>
+
+<p class="govuk-body">
+    The pagination component helps users navigate forwards and backwards through a series of pages.
+</p>
+
+@if (_model is not null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-l">Example</h2>
+
+            <div class="govuk-body">
+                <div>Current page: @_model.CurrentPage</div>
+                <div>Total pages: @_model.TotalPages</div>
+            </div>
+
+            <GdsPagination CurrentPage="@_model.CurrentPage"
+                           TotalPages="@_model.TotalPages"
+                           HrefGenerator="@(pageNumber => NavigationManager.Uri)"
+                           OnPageChanged="@OnPageChanged"
+                           PreviousLabel="@_previousLabel"
+                           NextLabel="@_nextLabel"
+                           BlockStyle="@_model.UseBlockStyle" />
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+            <EditForm EditContext="@_editContext" FormName="pagination">
+                <GdsFormGroup For="() => _model.UseBlockStyle">
+                    <GdsFieldsetGroup LegendSize="GdsFieldsetLegendSize.Medium">
+                        <Heading>
+                            <h2 class="govuk-fieldset__heading">Options</h2>
+                        </Heading>
+                        <Content>
+                            <GdsErrorMessage />
+                            <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
+                        </Content>
+                    </GdsFieldsetGroup>
+                </GdsFormGroup>
+
+                <GdsFormGroup For="() => _model.TotalPages">
+                    <GdsLabel Text="Total pages" />
+                    <GdsErrorMessage />
+                    <GdsSelect Options="@_totalPagesOptions" T="int" OnChange="OnTotalPagesChanged" />
+                </GdsFormGroup>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private PaginationDemoModel? _model;
+    private EditContext? _editContext;
+    private string? _previousLabel;
+    private string? _nextLabel;
+
+    private IReadOnlyCollection<GdsOptionItem<int>> _totalPagesOptions = [
+        new ("total-pages-three", "3", 3),
+        new ("total-pages-five", "5", 5),
+        new ("total-pages-ten", "10", 10),
+        new ("total-pages-twenty", "20", 20),
+        new ("total-pages-forty-two", "42", 42, selected: true),
+        new ("total-pages-fifty", "50", 50),
+        new ("total-pages-one-hundred", "100", 100),
+    ];
+
+    private GdsOptionItem<bool> _optionUseBlockStyle = new("use-block-style", "Block style", value: true);
+    private GdsOptionItem<bool> _optionUseBlockLabels = new("use-block-labels", "Use labels", value: true, hint: "with block style");
+
+    protected override void OnInitialized()
+    {
+        if (_model is null)
+        {
+            _model = new()
+            {
+                CurrentPage = 7,
+                TotalPages = 42,
+
+                // options
+                UseBlockStyle = false,
+                UseLabels = true,
+            };
+            _editContext = new(_model);
+            _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+
+            _optionUseBlockStyle.Selected = _model.UseBlockStyle;
+            _optionUseBlockLabels.Selected = _model.UseLabels;
+            UpdateLabels();
+        }
+    }
+
+    private Task OnPageChanged(int pageNumber)
+    {
+        if (_model is not null)
+        {
+            _model.CurrentPage = pageNumber;
+            // Search your API for new results ...
+        }
+        UpdateLabels();
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnTotalPagesChanged(GdsOptionItem<int> option)
+    {
+        if (_model is not null)
+        {
+            _model.TotalPages = option.Value;
+            if (_model.CurrentPage > _model.TotalPages)
+            {
+                _model.CurrentPage = _model.TotalPages;
+            }
+        }
+        UpdateLabels();
+
+        return Task.CompletedTask;
+    }
+
+    // update model from options
+    private Task OnChangedOptions(GdsOptionItem<bool> option)
+    {
+        if (_model is not null)
+        {
+            if (option.Id == _optionUseBlockStyle.Id)
+            {
+                _model.UseBlockStyle = option.Selected;
+            }
+            else if (option.Id == _optionUseBlockLabels.Id)
+            {
+                _model.UseLabels = option.Selected;
+            }
+            UpdateLabels();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void UpdateLabels()
+    {
+        if (_model is not null && _model.UseBlockStyle && _model.UseLabels)
+        {
+            _previousLabel = $"A previous page (go to page {_model.CurrentPage - 1})";
+            _nextLabel = $"A next page (go to page {_model.CurrentPage + 1})";
+        }
+        else
+        {
+            _previousLabel = null;
+            _nextLabel = null;
+        }
+    }
+
+    private class PaginationDemoModel
+    {
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public int CurrentPage { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Select)]
+        public int TotalPages { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool UseBlockStyle { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool UseLabels { get; set; }
+    }
+}

@@ -1,8 +1,9 @@
 @page "/radio"
+@rendermode InteractiveServer
 
 <PageTitle>Radio - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <h1 class="govuk-heading-xl">Radio</h1>
 
@@ -12,29 +13,39 @@
 
 <h2 class="govuk-heading-l">Example</h2>
 
-<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
-    <GdsFormGroup>
-        <GdsLabel>Do you agree?</GdsLabel>
-        <GdsRadios T="string" @bind-Value="model.Agreement" Label="">
-            <GdsRadio T="string" Value="yes">Yes, I agree</GdsRadio>
-            <GdsRadio T="string" Value="no">No, I don't agree</GdsRadio>
-        </GdsRadios>
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit" FormName="radio">
+    <GdsFormGroup For="() => model.Agreement">
+        <InputRadioGroup @bind-Value="model.Agreement">
+            <GdsFieldsetGroup>
+                <Heading>
+                    <h2 class="govuk-fieldset__heading">Do you agree?</h2>
+                </Heading>
+                <Content>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <GdsRadio Option="@yesOption" />
+                        <GdsRadio Option="@noOption" />
+                    </div>
+                </Content>
+            </GdsFieldsetGroup>
+        </InputRadioGroup>
     </GdsFormGroup>
 
-    <GdsButton Type="submit">Continue</GdsButton>
+    <GdsButton PreventDoubleClick="@true">Submit</GdsButton>
 </EditForm>
 
-@if (submitted)
-{
-    <div class="govuk-!-margin-top-6">
+<div class="govuk-!-margin-top-6">
+    @if (submitted)
+    {
         <h3 class="govuk-heading-m">Form Submitted</h3>
-        <p class="govuk-body">Agreement: @model.Agreement</p>
-    </div>
-}
+    }
+    <p class="govuk-body">Agreement: @model.Agreement</p>
+</div>
 
 @code {
     private RadioModel model = new();
     private bool submitted = false;
+    private GdsOptionItem<string> yesOption = new("agree-yes", "Yes, I agree", "yes");
+    private GdsOptionItem<string> noOption = new("agree-no", "No, I don't agree", "no");
 
     private void HandleValidSubmit()
     {
