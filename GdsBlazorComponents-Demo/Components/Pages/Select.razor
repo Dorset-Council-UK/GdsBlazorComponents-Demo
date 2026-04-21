@@ -12,23 +12,104 @@
 </p>
 
 <h2 class="govuk-heading-l">Examples</h2>
+<h3>Using a dictionary</h3>
 
-<GdsSelect Options="@ContactTypes" T="int" OnChange="OnContactTypeChange" />
-<span id="result-body">@Result</span>
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@SelectDictCodeExample</code></pre>
+</details>
+
+<GdsSelect @bind-Value="SelectedContactType" T="int">
+    @foreach(var value in ContactTypes)
+    {
+        <option value="@value.Key">@value.Value</option>
+    }
+</GdsSelect>
+<p>Selected Value: @SelectedContactType</p>
+
+<h3>Using an enum</h3>
+
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@SelectEnumCodeExample</code></pre>
+</details>
+
+<GdsSelect @bind-Value="SelectedContactTypeEnum" T="ContactTypeEnum">
+    @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+    {
+        <option value="@value">@value</option>
+    }
+</GdsSelect>
+<p>Selected Value: @SelectedContactTypeEnum</p>
 
 @code {
-    private string Result = string.Empty;
-    private IReadOnlyCollection<GdsOptionItem<int>> ContactTypes = [
-        new ("contactTypeNone", "Select an option", 0),
-        new ("contactTypePhone", "Phone", 1),
-        new ("contactTypeEmail", "Email", 2),
-        new ("contactTypeText", "Text message", 3),
-        new ("contactTypePost", "Post", 4),
-    ];
+    private string SelectDictCodeExample = """
+        <GdsSelect @bind-Value="SelectedContactType" T="int">
+            @foreach(var value in ContactTypes)
+            {
+                <option value="@value.Key">@value.Value</option>
+            }
+        </GdsSelect>
 
-    private void OnContactTypeChange(GdsOptionItem<int> option)
+        @code {
+            private int SelectedContactType = 1;
+            private Dictionary<int, string> ContactTypes = new Dictionary<int, string>
+            {
+                { 0, "None" },
+                { 1, "Phone" },
+                { 2, "Email" },
+                { 3, "Text" },
+                { 4, "Post" }
+            };
+        }
+        """;
+
+    private string SelectEnumCodeExample = """
+        <GdsSelect @bind-Value="SelectedContactTypeEnum" T="ContactTypeEnum">
+            @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+            {
+                <option value="@value">@value</option>
+            }
+        </GdsSelect>
+
+        @code {
+            private ContactTypeEnum SelectedContactTypeEnum = ContactTypeEnum.Text;
+            private enum ContactTypeEnum    
+            {
+                None,
+                Phone,
+                Email,
+                Text,
+                Post
+            };
+        }
+        """;
+
+    private int SelectedContactType = 1;
+    private Dictionary<int, string> ContactTypes = new Dictionary<int, string>
     {
-        // Do something when the select value changes
-        Result = $"Selected contact type: {option.Value} - {option.Label}";
-    }
+        { 0, "None" },
+        { 1, "Phone" },
+        { 2, "Email" },
+        { 3, "Text" },
+        { 4, "Post" }
+    };
+
+    private ContactTypeEnum SelectedContactTypeEnum = ContactTypeEnum.Text;
+    private enum ContactTypeEnum    
+    {
+        None,
+        Phone,
+        Email,
+        Text,
+        Post
+    };
 }

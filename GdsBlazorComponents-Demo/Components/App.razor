@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="@Assets["_content/Dorset-Council-UK.GdsBlazorComponents/gds.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["GdsBlazorComponents-Demo.styles.css"]" />
+    <link rel="stylesheet" href="@Assets["highlightjs.min.css"]" />
     <ImportMap />
     <HeadOutlet />
 </head>
@@ -18,6 +19,20 @@
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script type="module" src="@Assets["_content/Dorset-Council-UK.GdsBlazorComponents/gds.js"]"></script>
+    <script src="@Assets["highlight.min.js"]"></script>
+    <script>
+        function highlightAllUnprocessed() {
+            document.querySelectorAll('pre code:not(.hljs)').forEach(block => {
+                hljs.highlightElement(block);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', highlightAllUnprocessed);
+        document.addEventListener('enhancedload', highlightAllUnprocessed);
+
+        const observer = new MutationObserver(() => highlightAllUnprocessed());
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
 </body>
 
 </html>
