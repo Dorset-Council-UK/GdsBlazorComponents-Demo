@@ -1,0 +1,63 @@
+@page "/headings"
+@rendermode InteractiveServer
+
+<PageTitle>Headings - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<h1 class="govuk-heading-xl">Headings</h1>
+
+<p class="govuk-body">
+    The heading component is used to create headings with levels (H1 to H6) in accordance with the GOV.UK design system.
+    It allows you to specify the level and size of the heading, as well as any additional CSS classes or attributes.
+</p>
+
+<h2 class="govuk-heading-l">Example</h2>
+<div style="border: 2px dashed #484949; padding: 10px;">
+    <GdsHeading Level="@_model.Level" Size="@_model.Size">Example heading</GdsHeading>
+</div>
+
+<h3 class="govuk-heading-m">Parameters</h3>
+<EditForm Model="@_model" FormName="HeadingForm">
+    <GdsGridRow>
+        <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
+            <GdsFormGroup For="() => _model.Level">
+                <GdsLabel Text="Level" />
+                <GdsSelect T="byte" @bind-Value="@_model.Level">
+                    <option value="1" selected="@(_model.Level == 1)">1</option>
+                    <option value="2" selected="@(_model.Level == 2)">2</option>
+                    <option value="3" selected="@(_model.Level == 3)">3</option>
+                    <option value="4" selected="@(_model.Level == 4)">4</option>
+                    <option value="5" selected="@(_model.Level == 5)">5</option>
+                    <option value="6" selected="@(_model.Level == 6)">6</option>
+                </GdsSelect>
+            </GdsFormGroup>
+        </GdsGridColumn>
+
+        <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
+            <GdsFormGroup For="() => _model.Size">
+                <GdsLabel Text="Size" />
+                <GdsSelect T="GdsHeadingSize" @bind-Value="@_model.Size">
+                    @foreach (var value in Enum.GetValues(typeof(GdsHeadingSize)))
+                    {
+                        <option value="@value" selected="@(value.Equals(_model.Size))">@value</option>
+                    }
+                </GdsSelect>
+            </GdsFormGroup>
+        </GdsGridColumn>
+    </GdsGridRow>
+</EditForm>
+
+<p class="govuk-body govuk-!-margin-top-6">
+    <strong>Note:</strong> The heading component in this demo page is shown within a border for demonstration purposes. 
+</p>
+
+@code {
+    private HeadingModel _model = new();
+
+    private class HeadingModel
+    {
+        public byte Level { get; set; } = 1;
+        public GdsHeadingSize Size { get; set; } = GdsHeadingSize.ExtraLarge;
+    }
+}
