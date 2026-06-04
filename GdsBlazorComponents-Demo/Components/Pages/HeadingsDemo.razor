@@ -37,8 +37,8 @@
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
             <GdsFormGroup For="() => _model.Size">
                 <GdsLabel Text="Size" />
-                <GdsSelect T="GdsHeadingSize" @bind-Value="@_model.Size">
-                    @foreach (var value in Enum.GetValues(typeof(GdsHeadingSize)))
+                <GdsSelect T="GdsSize" @bind-Value="@_model.Size">
+                    @foreach (var value in Enum.GetValues(typeof(GdsSize)))
                     {
                         <option value="@value" selected="@(value.Equals(_model.Size))">@value</option>
                     }
@@ -58,6 +58,6 @@
     private class HeadingModel
     {
         public byte Level { get; set; } = 1;
-        public GdsHeadingSize Size { get; set; } = GdsHeadingSize.ExtraLarge;
+        public GdsSize Size { get; set; } = GdsSize.ExtraLarge;
     }
 }
