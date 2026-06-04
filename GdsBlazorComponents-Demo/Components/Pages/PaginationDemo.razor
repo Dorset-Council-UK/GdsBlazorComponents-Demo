@@ -14,7 +14,7 @@
 @if (_model is not null)
 {
     <GdsGridRow>
-        <div class="govuk-grid-column-two-thirds">
+        <GdsGridColumn Width="GdsGridColumnWidth.TwoThirds">
             <h2 class="govuk-heading-l">Example</h2>
 
             <div class="govuk-body">
@@ -29,9 +29,9 @@
                            PreviousLabel="@_previousLabel"
                            NextLabel="@_nextLabel"
                            BlockStyle="@_model.UseBlockStyle" />
-        </div>
+        </GdsGridColumn>
 
-        <div class="govuk-grid-column-one-third">
+        <GdsGridColumn Width="GdsGridColumnWidth.OneThird">
             <EditForm EditContext="@_editContext" FormName="pagination">
                 <GdsFormGroup For="() => _model.UseBlockStyle">
                     <GdsFieldsetGroup LegendSize="GdsFieldsetLegendSize.Medium">
@@ -51,7 +51,7 @@
                     <GdsSelect Options="@_totalPagesOptions" T="int" OnChange="OnTotalPagesChanged" />
                 </GdsFormGroup>
             </EditForm>
-        </div>
+        </GdsGridColumn>
     </GdsGridRow>
 }
 
