@@ -5,19 +5,19 @@
 
 <GdsBackLink Href="/" />
 
-<h1 class="govuk-heading-xl">Headings</h1>
+<GdsHeading Level="1">Headings</GdsHeading>
 
 <p class="govuk-body">
     The heading component is used to create headings with levels (H1 to H6) in accordance with the GOV.UK design system.
     It allows you to specify the level and size of the heading, as well as any additional CSS classes or attributes.
 </p>
 
-<h2 class="govuk-heading-l">Example</h2>
+<GdsHeading Level="2">Example</GdsHeading>
 <div style="border: 2px dashed #484949; padding: 10px;">
     <GdsHeading Level="@_model.Level" Size="@_model.Size">Example heading</GdsHeading>
 </div>
 
-<h3 class="govuk-heading-m">Parameters</h3>
+<GdsHeading Level="3">Parameters</GdsHeading>
 <EditForm Model="@_model" FormName="HeadingForm">
     <GdsGridRow>
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
@@ -37,7 +37,8 @@
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
             <GdsFormGroup For="() => _model.Size">
                 <GdsLabel Text="Size" />
-                <GdsSelect T="GdsSize" @bind-Value="@_model.Size">
+                <GdsSelect T="GdsSize?" @bind-Value="@_model.Size">
+                    <option value="" selected="@(_model.Size == null)">Auto</option>
                     @foreach (var value in Enum.GetValues(typeof(GdsSize)))
                     {
                         <option value="@value" selected="@(value.Equals(_model.Size))">@value</option>
@@ -58,6 +59,6 @@
     private class HeadingModel
     {
         public byte Level { get; set; } = 1;
-        public GdsSize Size { get; set; } = GdsSize.ExtraLarge;
+        public GdsSize? Size { get; set; }
     }
 }
