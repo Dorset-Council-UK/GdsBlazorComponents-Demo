@@ -5,15 +5,15 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Spinner</h1>
+<GdsHeading Level="1">Spinner</GdsHeading>
 
 <p class="govuk-body">
     Use the spinner component to indicate that content is loading.
 </p>
 
-<h2 class="govuk-heading-l">Examples</h2>
+<GdsHeading Level="2">Examples</GdsHeading>
 
-<h3 class="govuk-heading-m">Basic spinner</h3>
+<GdsHeading Level="3">Basic spinner</GdsHeading>
 <div class="govuk-!-margin-bottom-6">
 
     <GdsSpinner Show="showSpinner1" />
@@ -25,7 +25,7 @@
 
 </div>
 
-<h3 class="govuk-heading-m">Spinner with text</h3>
+<GdsHeading Level="3">Spinner with text</GdsHeading>
 <div class="govuk-!-margin-bottom-6">
 
     <GdsSpinner Show="showSpinner2" ShowMessage="true" />
@@ -38,10 +38,10 @@
 
 </div>
 
-<h3 class="govuk-heading-m">Simulated loading</h3>
+<GdsHeading Level="3">Simulated loading</GdsHeading>
 <div>
-        <GdsSpinner Show="isSimulatedLoading" />
-        @if (simulatedLoadComplete)
+    <GdsSpinner Show="isSimulatedLoading" />
+    @if (simulatedLoadComplete)
     {
         <GdsNotificationBanner BannerTitle="Success" BannerTitleSize="GdsNotificationBanner.BannerSizeOption.small">
             <p class="govuk-notification-banner__heading">Processing complete!</p>

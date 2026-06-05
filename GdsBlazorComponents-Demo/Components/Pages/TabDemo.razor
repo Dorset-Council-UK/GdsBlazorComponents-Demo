@@ -5,13 +5,13 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Tabs</h1>
+<GdsHeading Level="1">Tabs</GdsHeading>
 
 <p class="govuk-body">
     Render a GOV.UK Design System styled tabs component.
 </p>
 
-<h2 class="govuk-heading-l">Simple example</h2>
+<GdsHeading Level="2">Simple example</GdsHeading>
 
 <GdsTabs Title="Contents">
     <GdsTabPanel Id="past-day" Heading="Past day">
@@ -83,11 +83,11 @@
     private sealed record CaseManagerStats(string CaseManager, int CasesOpened, int CasesClosed);
 
     private static readonly IReadOnlyList<CaseManagerStats> PastDay =
-   [
-       new("David Francis", 3, 0),
+    [
+        new("David Francis", 3, 0),
         new("Paul Farmer", 1, 0),
         new("Rita Patel", 2, 0)
-   ];
+    ];
 
     private static readonly IReadOnlyList<CaseManagerStats> PastWeek =
     [

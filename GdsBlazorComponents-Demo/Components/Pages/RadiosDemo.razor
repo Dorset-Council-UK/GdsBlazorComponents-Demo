@@ -4,23 +4,23 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Radios</h1>
+<GdsHeading Level="1">Radios</GdsHeading>
 
 <p class="govuk-body">
     Use the radios component when users can only select one option from a list.
 </p>
 
-<h2 class="govuk-heading-l">Examples</h2>
+<GdsHeading Level="2">Examples</GdsHeading>
 
 <EditForm Model="@model">
     <DataAnnotationsValidator />
 
-    <h3 class="govuk-heading-m">Standard radios</h3>
+    <GdsHeading Level="3">Standard radios</GdsHeading>
     <GdsFormGroup For="() => model.ContactPreference">
         <InputRadioGroup @bind-Value="model.ContactPreference">
             <GdsFieldsetGroup>
                 <Heading>
-                    <h2 class="govuk-fieldset__heading">How would you prefer to be contacted?</h2>
+                    <GdsHeading Level="2" class="govuk-fieldset__heading">How would you prefer to be contacted?</GdsHeading>
                 </Heading>
                 <Content>
                     <GdsHint>Select one option</GdsHint>
@@ -31,7 +31,7 @@
         </InputRadioGroup>
     </GdsFormGroup>
 
-    <h3 class="govuk-heading-m govuk-!-margin-top-8">Inline radios</h3>
+    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Inline radios</GdsHeading>
     <GdsFormGroup For="() => model.DeliveryMethod">
         <InputRadioGroup @bind-Value="model.DeliveryMethod">
             <GdsFieldsetGroup>
@@ -45,7 +45,7 @@
         </InputRadioGroup>
     </GdsFormGroup>
 
-    <h3 class="govuk-heading-m govuk-!-margin-top-8">Smaller radios</h3>
+    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Smaller radios</GdsHeading>
     <GdsFormGroup For="() => model.Confirmed">
         <InputRadioGroup @bind-Value="model.Confirmed">
             <GdsFieldsetGroup>

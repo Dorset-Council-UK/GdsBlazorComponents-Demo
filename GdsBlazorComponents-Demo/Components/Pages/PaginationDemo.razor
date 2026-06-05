@@ -5,7 +5,7 @@
 
 <GdsBackLink Href="/" />
 
-<h1 class="govuk-heading-xl">Pagination</h1>
+<GdsHeading Level="1">Pagination</GdsHeading>
 
 <p class="govuk-body">
     The pagination component helps users navigate forwards and backwards through a series of pages.
@@ -15,7 +15,7 @@
 {
     <GdsGridRow>
         <GdsGridColumn Width="GdsGridColumnWidth.TwoThirds">
-            <h2 class="govuk-heading-l">Example</h2>
+            <GdsHeading Level="2">Example</GdsHeading>
 
             <div class="govuk-body">
                 <div>Current page: @_model.CurrentPage</div>
@@ -36,7 +36,7 @@
                 <GdsFormGroup For="() => _model.UseBlockStyle">
                     <GdsFieldsetGroup LegendSize="GdsSize.Medium">
                         <Heading>
-                            <h2 class="govuk-fieldset__heading">Options</h2>
+                            <GdsHeading Level="2" class="govuk-fieldset__heading">Options</GdsHeading>
                         </Heading>
                         <Content>
                             <GdsErrorMessage />

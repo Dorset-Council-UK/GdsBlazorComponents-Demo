@@ -5,20 +5,20 @@
 
 <GdsBackLink Href="/" />
 
-<h1 class="govuk-heading-xl">Radio</h1>
+<GdsHeading Level="1">Radio</GdsHeading>
 
 <p class="govuk-body">
     Individual radio button component. Usually used within a GdsRadios component.
 </p>
 
-<h2 class="govuk-heading-l">Example</h2>
+<GdsHeading Level="2">Example</GdsHeading>
 
 <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit" FormName="radio">
     <GdsFormGroup For="() => model.Agreement">
         <InputRadioGroup @bind-Value="model.Agreement">
             <GdsFieldsetGroup>
                 <Heading>
-                    <h2 class="govuk-fieldset__heading">Do you agree?</h2>
+                    <GdsHeading Level="2" class="govuk-fieldset__heading">Do you agree?</GdsHeading>
                 </Heading>
                 <Content>
                     <div class="govuk-radios" data-module="govuk-radios">
@@ -36,7 +36,7 @@
 <div class="govuk-!-margin-top-6">
     @if (submitted)
     {
-        <h3 class="govuk-heading-m">Form Submitted</h3>
+        <GdsHeading Level="3">Form Submitted</GdsHeading>
     }
     <p class="govuk-body">Agreement: @model.Agreement</p>
 </div>

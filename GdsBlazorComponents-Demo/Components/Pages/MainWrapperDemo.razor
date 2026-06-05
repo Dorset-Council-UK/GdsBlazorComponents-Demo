@@ -5,24 +5,24 @@
 
 <GdsBackLink Href="/" />
 
-<h1 class="govuk-heading-xl">Main wrapper</h1>
+<GdsHeading Level="1">Main wrapper</GdsHeading>
 
 <p class="govuk-body">
     The main wrapper layout component is used to wrap the main content of a page. It provides the necessary structure and spacing to ensure that the content is displayed correctly within the GOV.UK design system.
 </p>
 
-<h2 class="govuk-heading-l">Example</h2>
+<GdsHeading Level="2">Example</GdsHeading>
 <div style="border: 2px dashed #484949; padding: 10px;">
     <GdsContainer>
         <GdsMainWrapper AutoSpacing="@_model.AutoSpacing">
-            <h2 class="govuk-heading-l">Main wrapper example</h2>
+            <GdsHeading Level="2">Main wrapper example</GdsHeading>
             <p class="govuk-body">This is a paragraph inside a main wrapper</p>
         </GdsMainWrapper>
     </GdsContainer>
 </div>
 
 <p>
-    <h3 class="govuk-heading-m">Parameters</h3>
+    <GdsHeading Level="3">Parameters</GdsHeading>
     <EditForm Model="@_model" FormName="MainWrapper">
         <GdsFormGroup For="() => _model.AutoSpacing">
             <GdsCheckbox T="bool" Option="@_autoSpacingOption" Name="AutoSpacing" OnChanged="OnAutoSpacingChanged" />

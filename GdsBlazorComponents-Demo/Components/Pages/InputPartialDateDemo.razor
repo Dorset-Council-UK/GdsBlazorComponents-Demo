@@ -4,13 +4,13 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Input Partial Date</h1>
+<GdsHeading Level="1">Input Partial Date</GdsHeading>
 
 <p class="govuk-body">
     Use the partial date input component when users may not know or need to provide a complete date.
 </p>
 
-<h2 class="govuk-heading-l">Example</h2>
+<GdsHeading Level="2">Example</GdsHeading>
 
 <p class="govuk-body">
     This component is useful when:
@@ -21,7 +21,7 @@
     <li>The exact day is not required</li>
 </ul>
 
-<h3 class="govuk-heading-m">Simple example - Month and year</h3>
+<GdsHeading Level="3">Simple example - Month and year</GdsHeading>
 <EditForm Model="@model">
     <DataAnnotationsValidator />
 
@@ -32,14 +32,13 @@
 
 </EditForm>
 
-<h3 class="govuk-heading-m">Example using optional Heading and hint</h3>
-
+<GdsHeading Level="3">Example using optional Heading and hint</GdsHeading>
 <EditForm Model="@model">
     <DataAnnotationsValidator />
 
     <GdsInputPartialDate For="() => model.YearOfThing" ShowYear="true">
         <Heading>
-            <h1 class="govuk-fieldset__heading">What year did the thing happen?</h1>
+            <GdsHeading Level="1" class="govuk-fieldset__heading">What year did the thing happen?</GdsHeading>
         </Heading>
         <Hint>For example, 3 2024</Hint>
     </GdsInputPartialDate>
