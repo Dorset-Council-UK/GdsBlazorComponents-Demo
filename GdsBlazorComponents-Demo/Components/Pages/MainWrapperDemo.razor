@@ -21,14 +21,12 @@
     </GdsContainer>
 </div>
 
-<p>
-    <GdsHeading Level="3">Parameters</GdsHeading>
-    <EditForm Model="@_model" FormName="MainWrapper">
-        <GdsFormGroup For="() => _model.AutoSpacing">
-            <GdsCheckbox T="bool" Option="@_autoSpacingOption" Name="AutoSpacing" OnChanged="OnAutoSpacingChanged" />
-        </GdsFormGroup>
-    </EditForm>
-</p>
+<GdsHeading Level="3">Parameters</GdsHeading>
+<EditForm Model="@_model" FormName="MainWrapper">
+    <GdsFormGroup For="() => _model.AutoSpacing">
+        <GdsCheckbox T="bool" Option="@_autoSpacingOption" Name="AutoSpacing" OnChanged="OnAutoSpacingChanged" />
+    </GdsFormGroup>
+</EditForm>
 
 <p class="govuk-body govuk-!-margin-top-6">
     <strong>Note:</strong> The main wrapper layout in this demo page is shown within a border for demonstration purposes. 
