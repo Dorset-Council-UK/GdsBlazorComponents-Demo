@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GdsBlazorComponents\GdsBlazorComponents\GdsBlazorComponents.csproj" />
+    <PackageReference Include="Dorset-Council-UK.GdsBlazorComponents" Version="3.3.0" />
   </ItemGroup>
 
 </Project>
