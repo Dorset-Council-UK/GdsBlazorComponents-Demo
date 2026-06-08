@@ -4,15 +4,15 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Table</h1>
+<GdsHeading Level="1">Table</GdsHeading>
 
 <p class="govuk-body">
     Render a GOV.UK Design System styled table component.
 </p>
 
-<h2 class="govuk-heading-l">Simple example (using formatting)</h2>
+<GdsHeading Level="2">Simple example (using formatting)</GdsHeading>
 
-<GdsTable T="Payment" Items="@Payments" Caption="Months and rates" CaptionSize="GdsTableCaptionSize.Large" FirstCellIsHeader>
+<GdsTable T="Payment" Items="@Payments" Caption="Months and rates" FirstCellIsHeader>
     <HeaderContent>
         <GdsTableTh>Month you apply</GdsTableTh>
         <GdsTableTh Numeric>Rate for vehicles</GdsTableTh>
@@ -23,8 +23,7 @@
     </RowTemplate>
 </GdsTable>
 
-<h2 class="govuk-heading-l">Example using ChildContent</h2>
-
+<GdsHeading Level="2">Example using ChildContent</GdsHeading>
 
 <GdsTable T="Member" Items="@Members" Caption="Members" Density="GdsTableDensity.SmallTextUntilTablet">
     <HeaderContent>

@@ -4,27 +4,27 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Phase Banner</h1>
+<GdsHeading Level="1">Phase Banner</GdsHeading>
 
 <p class="govuk-body">
     Use the phase banner component to show users your service is still being worked on.
 </p>
 
-<h2 class="govuk-heading-l">Examples</h2>
+<GdsHeading Level="2">Examples</GdsHeading>
 
-<h3 class="govuk-heading-m">Alpha phase</h3>
+<GdsHeading Level="3">Alpha phase</GdsHeading>
 <GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Alpha" />
 
-<h3 class="govuk-heading-m govuk-!-margin-top-6">Beta phase with feedback link</h3>
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">Beta phase with feedback link</GdsHeading>
 <GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Beta" FeedbackLink="@feedbackLink" />
 
-<h3 class="govuk-heading-m govuk-!-margin-top-6">New phase with feedback link and custom text</h3>
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">New phase with feedback link and custom text</GdsHeading>
 <GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.New" FeedbackLink="@feedbackLink" FeedbackText="super wonderful feedback" />
 
-<h3 class="govuk-heading-m govuk-!-margin-top-6">Development phase</h3>
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">Development phase</GdsHeading>
 <GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.Development" />
 
-<h3 class="govuk-heading-m govuk-!-margin-top-6">No phase</h3>
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">No phase</GdsHeading>
 <GdsPhaseBanner Phase="@GdsPhaseBanner.Phases.None" />
 @code{
     Uri feedbackLink = new Uri("https://github.com/Dorset-Council-UK/GdsBlazorComponents");

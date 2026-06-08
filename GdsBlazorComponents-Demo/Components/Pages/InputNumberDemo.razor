@@ -4,18 +4,18 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Number Input</h1>
+<GdsHeading Level="1">Number Input</GdsHeading>
 
 <p class="govuk-body">
     Use the number input component when you need users to enter a number. The GOV.UK Design System defines two types: asking for whole numbers and asking for decimal numbers.
 </p>
 
-<h2 class="govuk-heading-l">Examples</h2>
+<GdsHeading Level="2">Examples</GdsHeading>
 
 <EditForm Model="@model">
     <DataAnnotationsValidator />
 
-    <h3 class="govuk-heading-m">Whole number example</h3>
+    <GdsHeading Level="3">Whole number example</GdsHeading>
     <GdsFormGroup For="() => model.AccountNumberText" Id="account-number">
         <GdsLabel Text="What is your account number?" />
         <GdsHint>Must be between 6 and 8 digits long</GdsHint>
@@ -23,7 +23,7 @@
         <GdsInputNumber @bind-Value=model.AccountNumberText @bind-NumberValue=model.AccountNumber class="govuk-input govuk-input--width-10" />
     </GdsFormGroup>
 
-    <h3 class="govuk-heading-m govuk-!-margin-top-8">Decimal number with suffix</h3>
+    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Decimal number with suffix</GdsHeading>
     <GdsFormGroup For="() => model.WeightText" Id="weight">
         <GdsLabel Text="How much does it weigh?" />
         <GdsHint>Weight, in kilograms</GdsHint>
@@ -34,7 +34,7 @@
         </div>
     </GdsFormGroup>
 
-    <h3 class="govuk-heading-m govuk-!-margin-top-8">Decimal number with prefix</h3>
+    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Decimal number with prefix</GdsHeading>
     <GdsFormGroup For="() => model.AmountText" Id="amount">
         <GdsLabel Text="What is the amount?" />
         <GdsHint>Enter the amount in pounds</GdsHint>

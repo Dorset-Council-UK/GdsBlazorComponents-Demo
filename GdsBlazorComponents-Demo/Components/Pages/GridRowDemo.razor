@@ -1,0 +1,29 @@
+@page "/grid-row"
+
+<PageTitle>Grid row - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<GdsHeading Level="1">Grid row</GdsHeading>
+
+<p class="govuk-body">
+    The grid row layout component allows the users to create a row in the GOV.UK grid system, which can be used to structure content into columns.
+</p>
+
+<GdsHeading Level="2">Example</GdsHeading>
+<div style="border: 1px solid black; padding: 10px;">
+    <GdsGridRow>
+        <GdsGridColumn Width="GdsGridColumnWidth.TwoThirds">
+            <GdsHeading Level="3" Size="GdsSize.ExtraLarge">Two-thirds column</GdsHeading>
+            <p class="govuk-body">This is a paragraph inside a two-thirds wide column</p>
+        </GdsGridColumn>
+        <GdsGridColumn Width="GdsGridColumnWidth.OneThird">
+            <GdsHeading Level="3" Size="GdsSize.Medium">One-third column</GdsHeading>
+            <p class="govuk-body">This is a paragraph inside a one-third wide column</p>
+        </GdsGridColumn>
+    </GdsGridRow>
+</div>
+
+<p class="govuk-body govuk-!-margin-top-6">
+    <strong>Note:</strong> The grid row layout in this demo page is shown within a border for demonstration purposes. 
+</p>

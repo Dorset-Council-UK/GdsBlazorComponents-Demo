@@ -4,20 +4,19 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Label</h1>
+<GdsHeading Level="1">Label</GdsHeading>
 
 <p class="govuk-body">
     Use labels to tell users what information you're asking them to provide.
 </p>
 
-<h2 class="govuk-heading-l">Examples</h2>
+<GdsHeading Level="2">Examples</GdsHeading>
 
-<h3 class="govuk-heading-m">Default label</h3>
+<GdsHeading Level="3">Default label</GdsHeading>
 <GdsLabel For="first-name" Text="First name" />
 <InputText id="first-name" class="govuk-input" @bind-Value="firstName" />
 
-<h3 class="govuk-heading-m govuk-!-margin-top-6">Label with custom CSS classes</h3>
-
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">Label with custom CSS classes</GdsHeading>
 <GdsLabel For="more-detail" Text="Can you provide more detail?" AdditionalCssClasses="govuk-label--m" />
 <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5"></textarea>
 

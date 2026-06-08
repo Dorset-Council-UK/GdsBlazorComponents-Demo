@@ -4,13 +4,13 @@
 
 <GdsBackLink Href="/"></GdsBackLink>
 
-<h1 class="govuk-heading-xl">Date Input</h1>
+<GdsHeading Level="1">Date Input</GdsHeading>
 
 <p class="govuk-body">
     Use the date input component to help users enter a memorable date.
 </p>
 
-<h2 class="govuk-heading-l">Example</h2>
+<GdsHeading Level="2">Example</GdsHeading>
 
 <EditForm Model="@model">
     <DataAnnotationsValidator />
@@ -19,15 +19,13 @@
         <GdsLabel Text="What is your date of birth" />
         <GdsInputDate For="() => model.DateOfBirth" />
     </GdsFormGroup>
-
-
-
 </EditForm>
-<h2 class="govuk-heading-l">Example with header and hint</h2>
+
+<GdsHeading Level="2">Example with header and hint</GdsHeading>
 <EditForm Model="@model">
     <GdsInputDate For="() => model.AppointmentDate">
         <Heading>
-            <h1 class="govuk-fieldset__heading">When do you want an appointment for?</h1>
+            <GdsHeading Level="1" class="govuk-fieldset__heading">When do you want an appointment for?</GdsHeading>
         </Heading>
         <Hint>For example, 12 3 2024</Hint>
     </GdsInputDate>

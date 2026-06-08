@@ -1,0 +1,49 @@
+@page "/main-wrapper"
+@rendermode InteractiveServer
+
+<PageTitle>Main wrapper - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<GdsHeading Level="1">Main wrapper</GdsHeading>
+
+<p class="govuk-body">
+    The main wrapper layout component is used to wrap the main content of a page. It provides the necessary structure and spacing to ensure that the content is displayed correctly within the GOV.UK design system.
+</p>
+
+<GdsHeading Level="2">Example</GdsHeading>
+<div style="border: 2px dashed #484949; padding: 10px;">
+    <GdsContainer>
+        <GdsMainWrapper AutoSpacing="@_model.AutoSpacing">
+            <GdsHeading Level="2">Main wrapper example</GdsHeading>
+            <p class="govuk-body">This is a paragraph inside a main wrapper</p>
+        </GdsMainWrapper>
+    </GdsContainer>
+</div>
+
+<GdsHeading Level="3">Parameters</GdsHeading>
+<EditForm Model="@_model" FormName="MainWrapper">
+    <GdsFormGroup For="() => _model.AutoSpacing">
+        <GdsCheckbox T="bool" Option="@_autoSpacingOption" Name="AutoSpacing" OnChanged="OnAutoSpacingChanged" />
+    </GdsFormGroup>
+</EditForm>
+
+<p class="govuk-body govuk-!-margin-top-6">
+    <strong>Note:</strong> The main wrapper layout in this demo page is shown within a border for demonstration purposes. 
+</p>
+
+@code {
+    private MainWrapperModel _model = new();
+
+    private class MainWrapperModel
+    {
+        public bool AutoSpacing { get; set; }
+    }
+
+    private GdsOptionItem<bool> _autoSpacingOption = new(id: "auto-spacing", label: "Auto spacing", value: false);
+
+    private void OnAutoSpacingChanged(GdsOptionItem<bool> option)
+    {
+        _model.AutoSpacing = option.Selected;
+    }
+}
