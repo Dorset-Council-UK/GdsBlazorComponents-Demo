@@ -1,0 +1,35 @@
+@page "/tasklist"
+
+<PageTitle>Task List - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<GdsHeading Level="1">Task list</GdsHeading>
+
+<p class="govuk-body">
+    The task list component displays all the tasks a user needs to do,
+    and allows users to easily identify which ones are done and which they still need to do.
+</p>
+
+<GdsHeading Level="2">Example</GdsHeading>
+
+<GdsTaskList>
+    <GdsTaskListItem Text="Company Directors" Href="tasklist">
+        <Status>Completed</Status>
+    </GdsTaskListItem>
+
+    <GdsTaskListItem Text="Registered company details" Href="tasklist">
+        <Status>
+            <GdsTag Text="Incomplete" Colour="GdsTagColour.Blue" />
+        </Status>
+    </GdsTaskListItem>
+
+    <GdsTaskListItem Text="Financial history" Href="tasklist">
+        <Hint>
+            Include 5 years of the company’s relevant financial information
+        </Hint>
+        <Status>
+            <GdsTag Text="Incomplete" Colour="GdsTagColour.Blue" />
+        </Status>
+    </GdsTaskListItem>
+</GdsTaskList>
