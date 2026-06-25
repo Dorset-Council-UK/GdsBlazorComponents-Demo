@@ -35,13 +35,12 @@
             <EditForm EditContext="@_editContext" FormName="pagination">
                 <GdsFormGroup For="() => _model.UseBlockStyle">
                     <GdsFieldsetGroup LegendTextSize="GdsSize.Medium">
-                        <Heading>
-                            <GdsHeading Level="2" class="govuk-fieldset__heading">Options</GdsHeading>
-                        </Heading>
-                        <Content>
-                            <GdsErrorMessage />
-                            <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
-                        </Content>
+                        <GdsFieldsetLegend>
+                            <GdsFieldsetHeading Level="2">Options</GdsFieldsetHeading>
+                        </GdsFieldsetLegend>
+
+                        <GdsErrorMessage />
+                        <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
                     </GdsFieldsetGroup>
                 </GdsFormGroup>
 

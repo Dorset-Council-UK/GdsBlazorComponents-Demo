@@ -17,15 +17,14 @@
     <GdsFormGroup For="() => model.Agreement">
         <InputRadioGroup @bind-Value="model.Agreement">
             <GdsFieldsetGroup>
-                <Heading>
-                    <GdsHeading Level="2" class="govuk-fieldset__heading">Do you agree?</GdsHeading>
-                </Heading>
-                <Content>
-                    <div class="govuk-radios" data-module="govuk-radios">
-                        <GdsRadio Option="@yesOption" />
-                        <GdsRadio Option="@noOption" />
-                    </div>
-                </Content>
+                <GdsFieldsetLegend>
+                    <GdsFieldsetHeading Level="2">Do you agree?</GdsFieldsetHeading>
+                </GdsFieldsetLegend>
+
+                <div class="govuk-radios" data-module="govuk-radios">
+                    <GdsRadio Option="@yesOption" />
+                    <GdsRadio Option="@noOption" />
+                </div>
             </GdsFieldsetGroup>
         </InputRadioGroup>
     </GdsFormGroup>

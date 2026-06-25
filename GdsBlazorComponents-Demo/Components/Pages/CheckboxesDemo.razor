@@ -17,14 +17,13 @@
     <GdsHeading Level="2">Standard checkboxes</GdsHeading>
     <GdsFormGroup For="() => model.ContactTypes" Id="contact-types-group">
         <GdsFieldsetGroup>
-            <Heading>
-                <GdsHeading Level="4" class="govuk-fieldset__heading">How can we contact you?</GdsHeading>
-            </Heading>
-            <Content>
-                <GdsHint>Select all that apply.</GdsHint>
-                <GdsErrorMessage />
-                <GdsCheckboxes T="int" Options="@contactTypeOptions" Name="ContactTypes" OnChanged="OnContactTypesChanged" />
-            </Content>
+            <GdsFieldsetLegend>
+                <GdsFieldsetHeading Level="4">How can we contact you?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsHint>Select all that apply.</GdsHint>
+            <GdsErrorMessage />
+            <GdsCheckboxes T="int" Options="@contactTypeOptions" Name="ContactTypes" OnChanged="OnContactTypesChanged" />
         </GdsFieldsetGroup>
         <p class="govuk-body">Selected contact types: @string.Join(", ", model.ContactTypes)</p>
     </GdsFormGroup>
@@ -32,12 +31,11 @@
     <GdsHeading Level="2">Smaller checkboxes</GdsHeading>
     <GdsFormGroup For="() => model.Interests" Id="interests-group">
         <GdsFieldsetGroup>
-            <Heading>
-                <GdsHeading Level="4" class="govuk-fieldset__heading">What are your interests?</GdsHeading>
-            </Heading>
-            <Content>
-                <GdsCheckboxes T="string" Options="@interestOptions" Name="Interests" Smaller OnChanged="OnInterestsChanged" />
-            </Content>
+            <GdsFieldsetLegend>
+                <GdsFieldsetHeading Level="4">What are your interests?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsCheckboxes T="string" Options="@interestOptions" Name="Interests" Smaller OnChanged="OnInterestsChanged" />
         </GdsFieldsetGroup>
         <p class="govuk-body">Selected interests: @string.Join(", ", model.Interests)</p>
     </GdsFormGroup>
@@ -45,12 +43,11 @@
     <GdsHeading Level="2">Checkboxes with exclusive behaviour</GdsHeading>
     <GdsFormGroup For="() => model.Countries" Id="countries-group">
         <GdsFieldsetGroup>
-            <Heading>
-                <GdsHeading Level="4" class="govuk-fieldset__heading">Will you be travelling to any of these countries?</GdsHeading>
-            </Heading>
-            <Content>
-                <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" OnChanged="OnCountriesChanged" />
-            </Content>
+            <GdsFieldsetLegend>
+                <GdsFieldsetHeading Level="4">Will you be travelling to any of these countries?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" OnChanged="OnCountriesChanged" />
         </GdsFieldsetGroup>
         <p class="govuk-body">Selected countries: @string.Join(", ", model.Countries)</p>
     </GdsFormGroup>

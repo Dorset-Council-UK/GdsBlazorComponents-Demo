@@ -19,14 +19,13 @@
     <GdsFormGroup For="() => model.ContactPreference">
         <InputRadioGroup @bind-Value="model.ContactPreference">
             <GdsFieldsetGroup>
-                <Heading>
-                    <GdsHeading Level="2" class="govuk-fieldset__heading">How would you prefer to be contacted?</GdsHeading>
-                </Heading>
-                <Content>
-                    <GdsHint>Select one option</GdsHint>
-                    <GdsErrorMessage />
-                    <GdsRadios Options="@contactOptions" />
-                </Content>
+                <GdsFieldsetLegend>
+                    <GdsFieldsetHeading Level="2">How would you prefer to be contacted?</GdsFieldsetHeading>
+                </GdsFieldsetLegend>
+
+                <GdsHint>Select one option</GdsHint>
+                <GdsErrorMessage />
+                <GdsRadios Options="@contactOptions" />
             </GdsFieldsetGroup>
         </InputRadioGroup>
     </GdsFormGroup>
@@ -35,12 +34,8 @@
     <GdsFormGroup For="() => model.DeliveryMethod">
         <InputRadioGroup @bind-Value="model.DeliveryMethod">
             <GdsFieldsetGroup>
-                <Heading>
-                    <legend class="govuk-fieldset__legend">How should we deliver your order?</legend>
-                </Heading>
-                <Content>
-                    <GdsRadios T="string" Options="@deliveryOptions" Inline="true" />
-                </Content>
+                <GdsFieldsetLegend>How should we deliver your order?</GdsFieldsetLegend>
+                <GdsRadios T="string" Options="@deliveryOptions" Inline="true" />
             </GdsFieldsetGroup>
         </InputRadioGroup>
     </GdsFormGroup>
@@ -49,12 +44,8 @@
     <GdsFormGroup For="() => model.Confirmed">
         <InputRadioGroup @bind-Value="model.Confirmed">
             <GdsFieldsetGroup>
-                <Heading>
-                    <legend class="govuk-fieldset__legend">Have you confirmed the details?</legend>
-                </Heading>
-                <Content>
-                    <GdsRadios Options="@yesNoOptions" Smaller="true" />
-                </Content>
+                <GdsFieldsetLegend>Have you confirmed the details?</GdsFieldsetLegend>
+                <GdsRadios Options="@yesNoOptions" Smaller />
             </GdsFieldsetGroup>
         </InputRadioGroup>
     </GdsFormGroup>
