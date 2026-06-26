@@ -1,4 +1,5 @@
 @page "/breadcrumbs"
+@using Microsoft.AspNetCore.Components.Sections
 
 <PageTitle>Breadcrumbs - GDS Components Demo</PageTitle>
 
@@ -7,6 +8,10 @@
 <GdsBackLink Href="/"></GdsBackLink>
 
 <GdsHeading Level="1">Breadcrumbs</GdsHeading>
+
+<div class="govuk-body" style="border: 1px solid black; padding: 10px;">
+    <SectionOutlet SectionName="Layout.GdsBreadcrumbs" />
+</div>
 
 <p class="govuk-body">
     Use the breadcrumbs component to help users understand where they are within a website's structure and move between levels.
