@@ -12,55 +12,73 @@
 </p>
 
 <GdsHeading Level="2">Examples</GdsHeading>
-<GdsHeading Level="3">Using a dictionary</GdsHeading>
 
-<details class="govuk-details">
-    <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-            View code example
-        </span>
-    </summary>
-    <pre><code>@SelectDictCodeExample</code></pre>
-</details>
+<EditForm EditContext="@editContext" OnSubmit="OnSubmit" FormName="SelectDemo">
+    <GdsHeading Level="3">Using a dictionary</GdsHeading>
 
-<GdsSelect @bind-Value="SelectedContactType" T="int">
-    @foreach(var value in ContactTypes)
-    {
-        <option value="@value.Key">@value.Value</option>
-    }
-</GdsSelect>
-<p>Selected Value: @SelectedContactType</p>
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                View code example
+            </span>
+        </summary>
+        <pre><code>@SelectDictCodeExample</code></pre>
+    </details>
 
-<GdsHeading Level="3">Using an enum</GdsHeading>
-
-<details class="govuk-details">
-    <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-            View code example
-        </span>
-    </summary>
-    <pre><code>@SelectEnumCodeExample</code></pre>
-</details>
-
-<GdsSelect @bind-Value="SelectedContactTypeEnum" T="ContactTypeEnum">
-    @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
-    {
-        <option value="@value">@value</option>
-    }
-</GdsSelect>
-<p>Selected Value: @SelectedContactTypeEnum</p>
-
-@code {
-    private string SelectDictCodeExample = """
-        <GdsSelect @bind-Value="SelectedContactType" T="int">
+    <GdsFormGroup For="() => model.SelectedContactType">
+        <GdsLabel Text="Contact type" />
+        <GdsHint>Select the contact type</GdsHint>
+        <GdsErrorMessage />
+        <GdsSelect @bind-Value="model.SelectedContactType" T="int">
             @foreach(var value in ContactTypes)
             {
                 <option value="@value.Key">@value.Value</option>
             }
         </GdsSelect>
+        <p>Selected Value: @model.SelectedContactType</p>
+    </GdsFormGroup>
+
+    <GdsHeading Level="3">Using an enum</GdsHeading>
+
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                View code example
+            </span>
+        </summary>
+        <pre><code>@SelectEnumCodeExample</code></pre>
+    </details>
+
+    <GdsFormGroup For="() => model.SelectedContactTypeEnum">
+        <GdsLabel Text="Contact type" />
+        <GdsHint>Select the contact type</GdsHint>
+        <GdsErrorMessage />
+        <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum">
+            @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+            {
+                <option value="@value">@value</option>
+            }
+        </GdsSelect>
+        <p>Selected Value: @model.SelectedContactTypeEnum</p>
+    </GdsFormGroup>
+</EditForm>
+
+@code {
+    private string SelectDictCodeExample = """
+        <GdsFormGroup For="() => model.SelectedContactType">
+            <GdsLabel Text="Contact type" />
+            <GdsHint>Select the contact type</GdsHint>
+            <GdsErrorMessage />
+            <GdsSelect @bind-Value="model.SelectedContactType" T="int">
+                @foreach(var value in ContactTypes)
+                {
+                    <option value="@value.Key">@value.Value</option>
+                }
+            </GdsSelect>
+            <p>Selected Value: @model.SelectedContactType</p>
+        </GdsFormGroup>
 
         @code {
-            private int SelectedContactType = 1;
             private Dictionary<int, string> ContactTypes = new Dictionary<int, string>
             {
                 { 0, "None" },
@@ -69,20 +87,43 @@
                 { 3, "Text" },
                 { 4, "Post" }
             };
+
+            private SelectModel model = new();
+            private EditContext? editContext;
+
+            protected override void OnInitialized()
+            {
+                if (editContext is null)
+                {
+                    editContext = new(model);
+                    editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+                }
+            }
+
+            public class SelectModel
+            {
+                [GdsFieldErrorClass(GdsFieldTypes.Select)]
+                public int SelectedContactType { get; set; } = 1;
+            }
         }
         """;
 
     private string SelectEnumCodeExample = """
-        <GdsSelect @bind-Value="SelectedContactTypeEnum" T="ContactTypeEnum">
-            @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
-            {
-                <option value="@value">@value</option>
-            }
-        </GdsSelect>
+        <GdsFormGroup For="() => model.SelectedContactTypeEnum">
+            <GdsLabel Text="Contact type" />
+            <GdsHint>Select the contact type</GdsHint>
+            <GdsErrorMessage />
+            <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum">
+                @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+                {
+                    <option value="@value">@value</option>
+                }
+            </GdsSelect>
+            <p>Selected Value: @model.SelectedContactTypeEnum</p>
+        </GdsFormGroup>
 
         @code {
-            private ContactTypeEnum SelectedContactTypeEnum = ContactTypeEnum.Text;
-            private enum ContactTypeEnum    
+            public enum ContactTypeEnum    
             {
                 None,
                 Phone,
@@ -90,10 +131,27 @@
                 Text,
                 Post
             };
+
+            private SelectModel model = new();
+            private EditContext? editContext;
+
+            protected override void OnInitialized()
+            {
+                if (editContext is null)
+                {
+                    editContext = new(model);
+                    editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+                }
+            }
+
+            public class SelectModel
+            {
+                [GdsFieldErrorClass(GdsFieldTypes.Select)]
+                public ContactTypeEnum SelectedContactTypeEnum { get; set; } = ContactTypeEnum.Text;
+            }
         }
         """;
 
-    private int SelectedContactType = 1;
     private Dictionary<int, string> ContactTypes = new Dictionary<int, string>
     {
         { 0, "None" },
@@ -103,8 +161,7 @@
         { 4, "Post" }
     };
 
-    private ContactTypeEnum SelectedContactTypeEnum = ContactTypeEnum.Text;
-    private enum ContactTypeEnum    
+    public enum ContactTypeEnum    
     {
         None,
         Phone,
@@ -112,4 +169,30 @@
         Text,
         Post
     };
+
+    private SelectModel model = new();
+    private EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
+
+    private void OnSubmit()
+    {
+        editContext?.Validate();
+    }
+
+    public class SelectModel
+    {
+        [GdsFieldErrorClass(GdsFieldTypes.Select)]
+        public int SelectedContactType { get; set; } = 1;
+        
+        [GdsFieldErrorClass(GdsFieldTypes.Select)]
+        public ContactTypeEnum SelectedContactTypeEnum { get; set; } = ContactTypeEnum.Text;
+    }
 }
