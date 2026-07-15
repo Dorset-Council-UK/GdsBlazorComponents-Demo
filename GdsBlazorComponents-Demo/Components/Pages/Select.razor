@@ -14,6 +14,9 @@
 <GdsHeading Level="2">Examples</GdsHeading>
 
 <EditForm EditContext="@editContext" OnSubmit="OnSubmit" FormName="SelectDemo">
+    <DataAnnotationsValidator />
+    <GdsErrorSummary />
+
     <GdsHeading Level="3">Using a dictionary</GdsHeading>
 
     <details class="govuk-details">
@@ -25,14 +28,16 @@
         <pre><code>@SelectDictCodeExample</code></pre>
     </details>
 
-    <GdsFormGroup For="() => model.SelectedContactType">
+    <GdsFormGroup>
         <GdsLabel Text="Contact type" />
-        <GdsHint>Select the contact type</GdsHint>
+        <GdsHint>The primary way to contact you</GdsHint>
         <GdsErrorMessage />
-        <GdsSelect @bind-Value="model.SelectedContactType" T="int">
-            @foreach(var value in ContactTypes)
+        <GdsSelect @bind-Value="model.SelectedContactType" T="int?">
+            <option value="">Please select</option>
+            @foreach(var contactType in ContactTypes)
             {
-                <option value="@value.Key">@value.Value</option>
+                bool selected = contactType.Key == model.SelectedContactType;
+                <option value="@contactType.Key" selected="@selected">@contactType.Value</option>
             }
         </GdsSelect>
         <p>Selected Value: @model.SelectedContactType</p>
@@ -49,30 +54,36 @@
         <pre><code>@SelectEnumCodeExample</code></pre>
     </details>
 
-    <GdsFormGroup For="() => model.SelectedContactTypeEnum">
+    <GdsFormGroup>
         <GdsLabel Text="Contact type" />
-        <GdsHint>Select the contact type</GdsHint>
+        <GdsHint>The primary way to contact you</GdsHint>
         <GdsErrorMessage />
-        <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum">
-            @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+        <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum?">
+            <option value="">Please select</option>
+            @foreach (var contactType in Enum.GetValues<ContactTypeEnum>())
             {
-                <option value="@value">@value</option>
+                bool selected = contactType == model.SelectedContactTypeEnum;
+                <option value="@contactType" selected="@selected">@contactType</option>
             }
         </GdsSelect>
         <p>Selected Value: @model.SelectedContactTypeEnum</p>
     </GdsFormGroup>
+
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 @code {
     private string SelectDictCodeExample = """
-        <GdsFormGroup For="() => model.SelectedContactType">
+        <GdsFormGroup>
             <GdsLabel Text="Contact type" />
-            <GdsHint>Select the contact type</GdsHint>
+            <GdsHint>The primary way to contact you</GdsHint>
             <GdsErrorMessage />
-            <GdsSelect @bind-Value="model.SelectedContactType" T="int">
-                @foreach(var value in ContactTypes)
+            <GdsSelect @bind-Value="model.SelectedContactType" T="int?">
+                <option value="">Please select</option>
+                @foreach(var contactType in ContactTypes)
                 {
-                    <option value="@value.Key">@value.Value</option>
+                    bool selected = contactType.Key == model.SelectedContactType;
+                    <option value="@contactType.Key" selected="@selected">@contactType.Value</option>
                 }
             </GdsSelect>
             <p>Selected Value: @model.SelectedContactType</p>
@@ -102,21 +113,24 @@
 
             public class SelectModel
             {
+                [Required(ErrorMessage = "Select the contact type")]
                 [GdsFieldErrorClass(GdsFieldTypes.Select)]
-                public int SelectedContactType { get; set; } = 1;
+                public int? SelectedContactType { get; set; }
             }
         }
         """;
 
     private string SelectEnumCodeExample = """
-        <GdsFormGroup For="() => model.SelectedContactTypeEnum">
+        <GdsFormGroup>
             <GdsLabel Text="Contact type" />
-            <GdsHint>Select the contact type</GdsHint>
+            <GdsHint>The primary way to contact you</GdsHint>
             <GdsErrorMessage />
-            <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum">
-                @foreach (var value in Enum.GetValues(typeof(ContactTypeEnum)))
+            <GdsSelect @bind-Value="model.SelectedContactTypeEnum" T="ContactTypeEnum?">
+                <option value="">Please select</option>
+                @foreach (var contactType in Enum.GetValues<ContactTypeEnum>())
                 {
-                    <option value="@value">@value</option>
+                    bool selected = contactType == model.SelectedContactTypeEnum;
+                    <option value="@contactType" selected="@selected">@contactType</option>
                 }
             </GdsSelect>
             <p>Selected Value: @model.SelectedContactTypeEnum</p>
@@ -146,8 +160,9 @@
 
             public class SelectModel
             {
+                [Required(ErrorMessage = "Select the contact type")]
                 [GdsFieldErrorClass(GdsFieldTypes.Select)]
-                public ContactTypeEnum SelectedContactTypeEnum { get; set; } = ContactTypeEnum.Text;
+                public ContactTypeEnum? SelectedContactTypeEnum { get; set; }
             }
         }
         """;
@@ -189,10 +204,12 @@
 
     public class SelectModel
     {
+        [Required(ErrorMessage = "Select the contact type")]
         [GdsFieldErrorClass(GdsFieldTypes.Select)]
-        public int SelectedContactType { get; set; } = 1;
-        
+        public int? SelectedContactType { get; set; }
+
+        [Required(ErrorMessage = "Select the contact type")]
         [GdsFieldErrorClass(GdsFieldTypes.Select)]
-        public ContactTypeEnum SelectedContactTypeEnum { get; set; } = ContactTypeEnum.Text;
+        public ContactTypeEnum? SelectedContactTypeEnum { get; set; }
     }
 }
