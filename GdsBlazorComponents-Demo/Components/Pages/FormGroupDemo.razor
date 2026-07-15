@@ -13,72 +13,30 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<GdsHeading Level="3">TESTING - Outside form</GdsHeading>
-
-<GdsFormGroup For="() => model.EventName" Id="event-name-one">
-    <GdsLabel Text="What is the name of the event?" />
-    <GdsInputText @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-</GdsFormGroup>
-
-<GdsFormGroup For="() => model.EventName" Id="event-name-two">
-    <GdsLabel Text="What is the name of the event?" />
-    <GdsHint>The name you'll use on promotional material</GdsHint>
-    <GdsInputText @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-</GdsFormGroup>
-
 <EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="FormGroupDemo">
     <DataAnnotationsValidator />
     <GdsErrorSummary />
 
-    <GdsHeading Level="3">TESTING - No form group</GdsHeading>
-
-    <GdsLabel Text="What is the name of the event?" For="outside" />
-    <GdsHint Id="outside-hint">The name you'll use on promotional material</GdsHint>
-    <GdsErrorMessage Id="outside-error" />
-    <GdsInputText id="outside" @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-
-    @*
-    <GdsFormGroup For="() => model.FullName">
+    <GdsFormGroup>
         <GdsLabel Text="What is your full name?" />
         <GdsHint>This is a hint. All parts of this input and grouped into a single form group</GdsHint>
         <GdsErrorMessage />
         <GdsInputText @bind-Value="model.FullName" class="govuk-input govuk-input--width-20" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Email">
+    <GdsFormGroup>
         <GdsLabel Text="What is your email address?" />
         <GdsErrorMessage />
         <GdsInputText @bind-Value="model.Email" class="govuk-input govuk-input--width-20" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Age">
-        <GdsLabel Text="What is your age?" />
+    <GdsFormGroup>
+        <GdsLabel Text="What is your age? (optional)" />
         <GdsErrorMessage />
         <GdsInputNumber @bind-Value="model.AgeText" NumberValue="model.Age" class="govuk-input govuk-input--width-3" />
     </GdsFormGroup>
-    *@
 
-    <GdsHeading Level="3">TESTING - Variations</GdsHeading>
-
-    <GdsFormGroup For="() => model.EventName" Id="event-name-three">
-        <GdsLabel Text="What is the name of the event?" />
-        <GdsInputText @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-    </GdsFormGroup>
-
-    <GdsFormGroup For="() => model.EventName" Id="event-name-four">
-        <GdsLabel Text="What is the name of the event?" />
-        <GdsHint>The name you'll use on promotional material</GdsHint>
-        <GdsInputText @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-    </GdsFormGroup>
-
-    <GdsFormGroup For="() => model.EventName">
-        <GdsLabel Text="What is the name of the event?" />
-        <GdsHint>The name you'll use on promotional material</GdsHint>
-        <GdsErrorMessage />
-        <GdsInputText @bind-Value="model.EventName" class="govuk-input govuk-input--width-20" />
-    </GdsFormGroup>
-
-    <GdsButton IsSubmit PreventDoubleClick Text="Submit" />
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 @code {
@@ -101,13 +59,16 @@
 
     public class FormGroupModel
     {
-        [Required(ErrorMessage = "Enter the event name")]
+        [Required(ErrorMessage = "Enter your full name")]
         [GdsFieldErrorClass(GdsFieldTypes.Input)]
-        public string? EventName { get; set; }
+        public string? FullName { get; set; }
 
         [Required(ErrorMessage = "Enter your email address")]
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
         [GdsFieldErrorClass(GdsFieldTypes.Input)]
         public string? Email { get; set; }
+
+        public string? AgeText { get; set; }
+        public int? Age { get; set; }
     }
 }
