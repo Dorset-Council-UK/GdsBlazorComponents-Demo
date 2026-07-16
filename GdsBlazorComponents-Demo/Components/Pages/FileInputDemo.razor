@@ -13,15 +13,18 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<EditForm Model="@model">
+<EditForm EditContext="@editContext" OnSubmit="OnSubmit" FormName="FileInputDemo">
     <DataAnnotationsValidator />
-    <GdsFormGroup For="() => model.SupportingDocuments">
+    <GdsErrorSummary />
+
+    <GdsFormGroup>
         <GdsLabel Text="Upload supporting documents" />
-        <GdsHint>Accepted file types: PDF, DOCX, JPG</GdsHint>
+        <GdsHint>Accepted file types: @_supportedFileTypesString</GdsHint>
         <GdsErrorMessage />
-        <GdsFileInput OnFilesSubmitted="HandleValidSubmit" />
+        <GdsFileInput Id="@nameof(model.SupportingDocuments)" OnFilesSubmitted="OnFilesSubmitted" />
     </GdsFormGroup>
 
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 <div>
@@ -42,14 +45,61 @@
 </div>
 
 @code {
+    // Id="supporting-documents"
     private FileInputModel model = new();
-    private bool submitted = false;
+    private EditContext editContext = default!;
+    private ValidationMessageStore messageStore = default!;
 
-    private void HandleValidSubmit(IReadOnlyList<IBrowserFile>? files)
+    private string[] _supportedFileTypes = [".pdf", ".docx", ".jpg" ];
+    private string _supportedFileTypesString => string.Join(", ", _supportedFileTypes.Select(o => o.TrimStart('.').ToUpperInvariant()).OrderBy(o => o));
+
+    protected override void OnInitialized()
     {
-        //validate the files at this point
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+            messageStore = new ValidationMessageStore(editContext);
+        }
+    }
+
+    private void OnSubmit()
+    { 
+        messageStore.Clear();
+        editContext.Validate();
+    }
+
+    private void OnFilesSubmitted(IReadOnlyList<IBrowserFile>? files)
+    {
+        FieldIdentifier fieldIdentifier = editContext.Field(nameof(model.SupportingDocuments));
+
         model.SupportingDocuments = files;
-        StateHasChanged();
+        editContext.NotifyFieldChanged(fieldIdentifier);
+
+        if (files is null || files.Count == 0)
+        {
+            return;
+        }
+
+        // check the supported file types
+        messageStore.Clear();
+        List<string> errors = [];
+        foreach (IBrowserFile file in files)
+        {
+            if (!_supportedFileTypes.Contains(Path.GetExtension(file.Name)))
+            {
+                errors.Add($"The file '{file.Name}' is not a supported file type.");
+            }
+        }
+
+        if (errors.Count > 0)
+        {
+            foreach (string error in errors)
+            {
+                messageStore.Add(fieldIdentifier, error);
+            }
+            editContext.NotifyValidationStateChanged();
+        }
     }
 
     private string FormatFileSize(long bytes)
@@ -68,6 +118,7 @@
     public class FileInputModel
     {
         [Required(ErrorMessage = "Select some files")]
-        public IReadOnlyList<IBrowserFile>? SupportingDocuments { get; set; } = [];
+        [GdsFieldErrorClass(GdsFieldTypes.FileUpload)]
+        public IReadOnlyList<IBrowserFile>? SupportingDocuments { get; set; }
     }
 }
