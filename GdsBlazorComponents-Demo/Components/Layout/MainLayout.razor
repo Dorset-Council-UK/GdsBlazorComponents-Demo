@@ -8,7 +8,18 @@
 
 <GdsContainer AdditionalCssClasses="flex-fill">
     <GdsMainWrapper id="main-content" AdditionalCssClasses="govuk-body">
-        @Body
+        @if (Env.IsProduction())
+        {
+            <GdsErrorBoundary>
+                @Body
+            </GdsErrorBoundary>
+        }
+        else
+        {
+            <GdsErrorBoundary ShowErrorMessage ShowHelpLink ShowRetryButton>
+                @Body
+            </GdsErrorBoundary>
+        }
     </GdsMainWrapper>
 </GdsContainer>
 
@@ -33,11 +44,12 @@
 </div>
 
 @code {
+    [Inject]
+    private IWebHostEnvironment Env { get; set; } = default!;
+
     private string GetSkipLinkHref()
     {
         var currentUri = new Uri(NavigationManager.Uri);
         return $"{currentUri.GetLeftPart(UriPartial.Path)}#main-content";
     }
-
-
 }
