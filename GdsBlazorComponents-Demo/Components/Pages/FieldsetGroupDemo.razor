@@ -13,45 +13,46 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit" FormName="FieldsetGroup">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="FieldsetGroup">
     <DataAnnotationsValidator />
+    <GdsErrorSummary />
 
     <GdsFieldsetGroup>
         <GdsFieldsetLegend Size="@model.LegendSize">
             <GdsFieldsetHeading Level="@model.LegendLevel">What's your address?</GdsFieldsetHeading>
         </GdsFieldsetLegend>
 
-        <GdsFormGroup For="() => model.AddressLine1">
+        <GdsFormGroup>
             <GdsLabel Text="Address Line 1" />
             <GdsErrorMessage />
             <GdsInputText @bind-Value="model.AddressLine1" class="govuk-input govuk-input--width-20" />
         </GdsFormGroup>
 
-        <GdsFormGroup For="() => model.AddressLine2">
-            <GdsLabel Text="Address Line 2" />
+        <GdsFormGroup>
+            <GdsLabel Text="Address Line 2 (optional)" />
             <GdsErrorMessage />
             <GdsInputText @bind-Value="model.AddressLine2" class="govuk-input govuk-input--width-20" />
         </GdsFormGroup>
 
-        <GdsFormGroup For="() => model.City">
+        <GdsFormGroup>
             <GdsLabel Text="City" />
             <GdsErrorMessage />
             <GdsInputText @bind-Value="model.City" class="govuk-input govuk-input--width-20" />
         </GdsFormGroup>
 
-        <GdsFormGroup For="() => model.Postcode">
+        <GdsFormGroup>
             <GdsLabel Text="Postcode" />
             <GdsErrorMessage />
             <GdsInputText @bind-Value="model.Postcode" class="govuk-input govuk-input--width-20" />
         </GdsFormGroup>
     </GdsFieldsetGroup>
 
-    <GdsButton PreventDoubleClick>Submit</GdsButton>
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 
     <GdsHeading Level="2">Parameters</GdsHeading>
     <GdsGridRow>
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
-            <GdsFormGroup For="() => model.LegendLevel">
+            <GdsFormGroup>
                 <GdsLabel Text="Legend level" />
                 <GdsSelect T="byte" @bind-Value="@model.LegendLevel">
                     <option value="1" selected="@(model.LegendLevel == 1)">1</option>
@@ -65,7 +66,7 @@
         </GdsGridColumn>
 
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
-            <GdsFormGroup For="() => model.LegendSize">
+            <GdsFormGroup>
                 <GdsLabel Text="Legend size" />
                 <GdsSelect T="GdsSize?" @bind-Value="@model.LegendSize">
                     <option value="" selected="@(model.LegendSize == null)">Auto</option>
@@ -77,26 +78,38 @@
             </GdsFormGroup>
         </GdsGridColumn>
     </GdsGridRow>
+
+    @if (submitted)
+    {
+        <div class="govuk-!-margin-top-6">
+            <GdsHeading Level="3">Form submitted</GdsHeading>
+            <p class="govuk-body">Line 1: @model.AddressLine1</p>
+            <p class="govuk-body">Line 2: @model.AddressLine2</p>
+            <p class="govuk-body">City: @model.City</p>
+            <p class="govuk-body">Postcode: @model.Postcode</p>
+        </div>
+    }
 </EditForm>
 
-@if (submitted)
-{
-    <div class="govuk-!-margin-top-6">
-        <GdsHeading Level="3">Form submitted</GdsHeading>
-        <p class="govuk-body">Line 1: @model.AddressLine1</p>
-        <p class="govuk-body">Line 2: @model.AddressLine2</p>
-        <p class="govuk-body">City: @model.City</p>
-        <p class="govuk-body">Postcode: @model.Postcode</p>
-    </div>
-}
 
-@code {
+    @code {
     private FieldsetGroupModel model = new();
-    private bool submitted = false;
+    private EditContext? editContext;
+    private bool submitted;
 
-    private void HandleValidSubmit()
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
+
+    private void OnSubmit()
     {
         submitted = true;
+        editContext?.Validate();
     }
 
     public class FieldsetGroupModel
@@ -106,14 +119,17 @@
         public GdsSize? LegendSize { get; set; }
 
         [Required(ErrorMessage = "Enter address line 1")]
-        public string AddressLine1 { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? AddressLine1 { get; set; }
 
         public string? AddressLine2 { get; set; }
 
         [Required(ErrorMessage = "Enter town or city")]
-        public string City { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? City { get; set; }
 
         [Required(ErrorMessage = "Enter postcode")]
-        public string Postcode { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? Postcode { get; set; }
     }
 }
