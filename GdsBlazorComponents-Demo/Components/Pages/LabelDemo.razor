@@ -2,7 +2,7 @@
 
 <PageTitle>Label - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <GdsHeading Level="1">Label</GdsHeading>
 
@@ -16,8 +16,8 @@
 <GdsLabel For="first-name" Text="First name" />
 <InputText id="first-name" class="govuk-input" @bind-Value="firstName" />
 
-<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">Label with custom CSS classes</GdsHeading>
-<GdsLabel For="more-detail" Text="Can you provide more detail?" AdditionalCssClasses="govuk-label--m" />
+<GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-6">Label with Size</GdsHeading>
+<GdsLabel For="more-detail" Text="Can you provide more detail?" Size="GdsSize.Large" />
 <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5"></textarea>
 
 @code{
