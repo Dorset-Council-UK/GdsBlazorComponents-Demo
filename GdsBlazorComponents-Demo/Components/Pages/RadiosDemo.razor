@@ -1,8 +1,9 @@
 @page "/radios"
+@rendermode InteractiveServer
 
 <PageTitle>Radios - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <GdsHeading Level="1">Radios</GdsHeading>
 
@@ -12,78 +13,178 @@
 
 <GdsHeading Level="2">Examples</GdsHeading>
 
-<EditForm Model="@model">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="RadiosDemo">
     <DataAnnotationsValidator />
+    <GdsErrorSummary />
 
-    <GdsHeading Level="3">Standard radios</GdsHeading>
-    <GdsFormGroup For="() => model.ContactPreference">
-        <InputRadioGroup @bind-Value="model.ContactPreference">
-            <GdsFieldsetGroup>
-                <GdsFieldsetLegend>
-                    <GdsFieldsetHeading Level="2">How would you prefer to be contacted?</GdsFieldsetHeading>
-                </GdsFieldsetLegend>
+    <GdsHeading Level="3">Radio buttons from list</GdsHeading>
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="3">Where do you live?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
 
-                <GdsHint>Select one option</GdsHint>
-                <GdsErrorMessage />
-                <GdsRadios Options="@contactOptions" />
-            </GdsFieldsetGroup>
-        </InputRadioGroup>
+            <GdsHint>Select one option</GdsHint>
+            <GdsErrorMessage />
+
+            <GdsRadios @bind-Value="model.Country">
+                @foreach ((string countryCode, string countryName) in countries)
+                {
+                    <GdsRadioItem>
+                        <GdsInputRadio Value="@countryCode" />
+                        <GdsRadioLabel Text="@countryName" />
+                    </GdsRadioItem>
+                }
+
+                <GdsRadioDivider />
+
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@("OTHER")" />
+                    <GdsRadioLabel Text="Other" />
+                    <GdsRadioHint>I live in another country</GdsRadioHint>
+                </GdsRadioItem>
+            </GdsRadios>
+        </GdsFieldsetGroup>
+    </GdsFormGroup>
+    
+    <GdsHeading Level="3">Radio buttons from Enum</GdsHeading>
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="3">How would you prefer to be contacted?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsHint>Select one option</GdsHint>
+            <GdsErrorMessage />
+
+            <GdsRadios @bind-Value="model.ContactPreference">
+                @foreach (ContactPreferences contact in Enum.GetValues<ContactPreferences>())
+                {
+                    <GdsRadioItem>
+                        <GdsInputRadio Value="@contact" />
+                        <GdsRadioLabel Text="@contact.ToString()" />
+                    </GdsRadioItem>
+                }
+            </GdsRadios>
+        </GdsFieldsetGroup>
     </GdsFormGroup>
 
-    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Inline radios</GdsHeading>
-    <GdsFormGroup For="() => model.DeliveryMethod">
-        <InputRadioGroup @bind-Value="model.DeliveryMethod">
-            <GdsFieldsetGroup>
-                <GdsFieldsetLegend>How should we deliver your order?</GdsFieldsetLegend>
-                <GdsRadios T="string" Options="@deliveryOptions" Inline="true" />
-            </GdsFieldsetGroup>
-        </InputRadioGroup>
+    <GdsHeading Level="3">Conditional fields</GdsHeading>
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="3">How would you prefer to be contacted?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsHint>Select one option</GdsHint>
+            <GdsErrorMessage />
+
+            <GdsRadios @bind-Value="model.ContactPreference2">
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@ContactPreferences.Email" ConditionalId="conditional-email" />
+                    <GdsRadioLabel Text="Email" />
+                </GdsRadioItem>
+                <GdsRadioConditional Id="conditional-email">
+                    <GdsFormGroup>
+                        <GdsLabel Text="Email address" />
+                        <GdsErrorMessage />
+                        <GdsInputText @bind-Value="@model.EmailAddress" type="email" spellcheck="false" autocomplete="email" class="govuk-input govuk-!-width-one-third" />
+                    </GdsFormGroup>
+                </GdsRadioConditional>
+
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@ContactPreferences.Phone" ConditionalId="conditional-phone" />
+                    <GdsRadioLabel Text="Phone" />
+                </GdsRadioItem>
+                <GdsRadioConditional Id="conditional-phone">
+                    <GdsFormGroup>
+                        <GdsLabel Text="Phone number" />
+                        <GdsErrorMessage />
+                        <GdsInputText @bind-Value="@model.PhoneNumber" type="tel" autocomplete="tel" class="govuk-input govuk-!-width-one-third" />
+                    </GdsFormGroup>
+                </GdsRadioConditional>
+
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@ContactPreferences.Text" ConditionalId="conditional-text" />
+                    <GdsRadioLabel Text="Text" />
+                </GdsRadioItem>
+                <GdsRadioConditional Id="conditional-text">
+                    <GdsFormGroup>
+                        <GdsLabel Text="Mobile phone number" />
+                        <GdsErrorMessage />
+                        <GdsInputText @bind-Value="@model.MobileNumber" type="tel" autocomplete="tel" class="govuk-input govuk-!-width-one-third" />
+                    </GdsFormGroup>
+                </GdsRadioConditional>
+            </GdsRadios>
+        </GdsFieldsetGroup>
     </GdsFormGroup>
 
-    <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Smaller radios</GdsHeading>
-    <GdsFormGroup For="() => model.Confirmed">
-        <InputRadioGroup @bind-Value="model.Confirmed">
-            <GdsFieldsetGroup>
-                <GdsFieldsetLegend>Have you confirmed the details?</GdsFieldsetLegend>
-                <GdsRadios Options="@yesNoOptions" Smaller />
-            </GdsFieldsetGroup>
-        </InputRadioGroup>
-    </GdsFormGroup>
-
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 
 @code {
     private RadiosModel model = new();
+    private EditContext? editContext;
 
-    private IReadOnlyCollection<GdsOptionItem<int>> contactOptions = [
-        new ("contactPhone", "Phone", 1, false, false, "We'll call you during business hours"),
-        new ("contactEmail", "Email", 2, false, false, "We'll send you a confirmation email"),
-        new ("contactText", "Text message", 3, false, false, "We'll send you a text message"),
-        new ("contactPost", "Post", 4),
+    private KeyValuePair<string, string>[] countries = [
+        new("GB-ENG", "England"),
+        new("GB-SCT", "Scotland"),
+        new("GB-WLS", "Wales"),
+        new("GB-NIR", "Northern Ireland"),
     ];
 
-    private IReadOnlyCollection<GdsOptionItem<string>> deliveryOptions = [
-        new ("deliveryStandard", "Standard delivery", "standard"),
-        new ("deliveryExpress", "Express delivery", "express"),
-        new ("deliveryCollect", "Click and collect", "collect"),
-    ];
+    public enum ContactPreferences
+    {
+        Unknown,
+        Email,
+        Phone,
+        Text,
+    }
 
-    private IReadOnlyCollection<GdsOptionItem<bool>> yesNoOptions = [
-        new ("confirmedYes", "Yes", true),
-        new ("confirmedNo", "No", false),
-    ];
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
 
-    
+    private void OnSubmit()
+    {
+        editContext?.Validate();
+    }
 
     public class RadiosModel
     {
-        [Required(ErrorMessage = "Select how you would prefer to be contacted")]
-        public int ContactPreference { get; set; }
+        [Required(ErrorMessage = "Select where you live")]
+        [GdsFieldErrorClass(GdsFieldTypes.Radio)]
+        public string? Country { get; set; }
 
-        [Required(ErrorMessage = "Select a delivery method")]
-        public string DeliveryMethod { get; set; } = "";
+        [Required]
+        [Range(typeof(ContactPreferences), nameof(ContactPreferences.Email), nameof(ContactPreferences.Text), ErrorMessage = "Select how you prefer to be contacted")]
+        [GdsFieldErrorClass(GdsFieldTypes.Radio)]
+        public ContactPreferences? ContactPreference { get; set; } = ContactPreferences.Unknown;
 
-        public bool Confirmed { get; set; }
+        [Required]
+        [Range(typeof(ContactPreferences), nameof(ContactPreferences.Email), nameof(ContactPreferences.Text), ErrorMessage = "Select how you prefer to be contacted (conditional example)")]
+        [GdsFieldErrorClass(GdsFieldTypes.Radio)]
+        public ContactPreferences? ContactPreference2 { get; set; } = ContactPreferences.Unknown;
+
+        [Required(ErrorMessage = "Enter your email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? EmailAddress { get; set; }
+
+        [Required(ErrorMessage = "Enter your email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Enter your email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? MobileNumber { get; set; }
     }
 }
