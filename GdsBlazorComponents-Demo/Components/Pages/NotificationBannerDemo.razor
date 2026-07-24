@@ -13,7 +13,7 @@
 <GdsHeading Level="2">Examples</GdsHeading>
 
 <GdsHeading Level="3">Default banner</GdsHeading>
-<GdsNotificationBanner BannerTitle="Important">
+<GdsNotificationBanner Id="banner-1" BannerTitle="Important">
     <p>
         You have 7 days left to send your application.
         <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
@@ -21,9 +21,7 @@
 </GdsNotificationBanner>
 
 <GdsHeading Level="3">Banner with h2 heading and h3 inside content</GdsHeading>
-<GdsNotificationBanner BannerTitle="Success" BannerTitleSize="GdsNotificationBanner.BannerSizeOption.large">
-    <h3>
-        Training session scheduled
-    </h3>
+<GdsNotificationBanner Id="banner-2" BannerTitle="Success" BannerHeadingLevel="2">
+    <GdsHeading Level="3">Training session scheduled</GdsHeading>
     <p class="govuk-body">We have scheduled your training session for 15 December 2024.</p>
 </GdsNotificationBanner>
