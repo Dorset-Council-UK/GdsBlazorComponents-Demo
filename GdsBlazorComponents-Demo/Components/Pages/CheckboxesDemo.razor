@@ -11,138 +11,243 @@
     Use the checkboxes component when you want users to select multiple options from a list.
 </p>
 
-<EditForm EditContext="_editContext" FormName="CheckboxesDemo">
+<GdsHeading Level="2">Examples</GdsHeading>
+
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="CheckboxesDemo">
     <DataAnnotationsValidator />
+    <GdsErrorSummary />
 
-    <GdsHeading Level="2">Standard checkboxes</GdsHeading>
-    <GdsFormGroup For="() => model.ContactTypes" Id="contact-types-group">
+    <GdsHeading Level="3">Checkboxes from list</GdsHeading>
+    <GdsFormGroup>
         <GdsFieldsetGroup>
-            <GdsFieldsetLegend>
-                <GdsFieldsetHeading Level="4">How can we contact you?</GdsFieldsetHeading>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="4">Which types of waste do you transport?</GdsFieldsetHeading>
             </GdsFieldsetLegend>
 
-            <GdsHint>Select all that apply.</GdsHint>
+            <GdsHint>Select all that apply</GdsHint>
             <GdsErrorMessage />
-            <GdsCheckboxes T="int" Options="@contactTypeOptions" Name="ContactTypes" OnChanged="OnContactTypesChanged" />
-        </GdsFieldsetGroup>
-        <p class="govuk-body">Selected contact types: @string.Join(", ", model.ContactTypes)</p>
-    </GdsFormGroup>
 
-    <GdsHeading Level="2">Smaller checkboxes</GdsHeading>
-    <GdsFormGroup For="() => model.Interests" Id="interests-group">
+            <GdsCheckboxes For="() => model.Waste">
+                @foreach ((Guid wasteId, string wasteLabel) in wasteTypesFromDatabase)
+                {
+                    bool isOther = wasteId == OtherWasteTypeId;
+                    string key = wasteId.ToString("N");
+
+                    if (isOther)
+                    {
+                        <GdsCheckboxDivider />
+
+                        <GdsCheckboxItem>
+                            <GdsInputCheckbox @bind-Value="@SelectedWasteTypes[key]" OnChanged="isChecked => OnWasteTypeChanged(isChecked, wasteId)" />
+                            <GdsCheckboxLabel Text="@wasteLabel" />
+                            <GdsCheckboxHint>I live in another country</GdsCheckboxHint>
+                        </GdsCheckboxItem>
+                    }
+                    else
+                    {
+                        <GdsCheckboxItem>
+                            <GdsInputCheckbox @bind-Value="@SelectedWasteTypes[key]" OnChanged="isChecked => OnWasteTypeChanged(isChecked, wasteId)" />
+                            <GdsCheckboxLabel Text="@wasteLabel" />
+                        </GdsCheckboxItem>
+                    }
+                }
+            </GdsCheckboxes>
+        </GdsFieldsetGroup>
+    </GdsFormGroup>
+    <p class="govuk-body">
+        Selected waste (model):
+        <p>@string.Join(", ", model.Waste)</p>
+    </p>
+    <p class="govuk-body">
+        Selected radio buttons (dictionary&lt;string, bool&gt;):
+        <p>@string.Join(", ", SelectedWasteTypes.Select(kvp => $"[{kvp.Key[..8]}..., {kvp.Value}]"))</p>
+    </p>
+
+    <GdsHeading Level="3">Checkboxes from Enum, and conditional email</GdsHeading>
+    <GdsFormGroup>
         <GdsFieldsetGroup>
-            <GdsFieldsetLegend>
-                <GdsFieldsetHeading Level="4">What are your interests?</GdsFieldsetHeading>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="4">How would you like to be contacted?</GdsFieldsetHeading>
             </GdsFieldsetLegend>
 
-            <GdsCheckboxes T="string" Options="@interestOptions" Name="Interests" Smaller OnChanged="OnInterestsChanged" />
-        </GdsFieldsetGroup>
-        <p class="govuk-body">Selected interests: @string.Join(", ", model.Interests)</p>
-    </GdsFormGroup>
+            <GdsHint>Select all options that are relevant to you</GdsHint>
+            <GdsErrorMessage />
 
-    <GdsHeading Level="2">Checkboxes with exclusive behaviour</GdsHeading>
-    <GdsFormGroup For="() => model.Countries" Id="countries-group">
+            <GdsCheckboxes For="() => model.ContactPreferences">
+                @foreach (ContactPreferencesEnum contactPreference in Enum.GetValues<ContactPreferencesEnum>())
+                {
+                    int key = (int)contactPreference;
+                    
+                    if (contactPreference == ContactPreferencesEnum.Email)
+                    {
+                        <GdsCheckboxItem>
+                            <GdsInputCheckbox @bind-Value="@SelectedContactPreferences[key]" OnChanged="isChecked => OnContactPreferencesChanged(isChecked, contactPreference)" ConditionalId="conditional-email" />
+                            <GdsCheckboxLabel Text="@contactPreference.ToString()" />
+                        </GdsCheckboxItem>
+                        <GdsCheckboxConditional Id="conditional-email">
+                            <GdsFormGroup>
+                                <GdsLabel Text="Email address" />
+                                <GdsErrorMessage />
+                                <GdsInputText @bind-Value="@model.EmailAddress" type="email" spellcheck="false" autocomplete="email" class="govuk-input govuk-!-width-one-third" />
+                            </GdsFormGroup>
+                        </GdsCheckboxConditional>
+                    }
+                    else
+                    {
+                        <GdsCheckboxItem>
+                            <GdsInputCheckbox @bind-Value="@SelectedContactPreferences[key]" OnChanged="isChecked => OnContactPreferencesChanged(isChecked, contactPreference)" />
+                            <GdsCheckboxLabel Text="@contactPreference.ToString()" />
+                        </GdsCheckboxItem>
+                    }
+                }
+            </GdsCheckboxes>
+        </GdsFieldsetGroup>
+    </GdsFormGroup>
+    <p class="govuk-body">
+        Selected contact preferences (model):
+        @string.Join(", ", model.ContactPreferences)
+     </p>
+    <p class="govuk-body">
+        Selected radio buttons (dictionary&lt;int, bool&gt;):
+        @string.Join(", ", SelectedContactPreferences)
+    </p>
+
+    <GdsHeading Level="3">Manual Checkboxes</GdsHeading>
+    <GdsFormGroup>
         <GdsFieldsetGroup>
-            <GdsFieldsetLegend>
-                <GdsFieldsetHeading Level="4">Will you be travelling to any of these countries?</GdsFieldsetHeading>
+            <GdsFieldsetLegend Size="GdsSize.Medium">
+                <GdsFieldsetHeading Level="4">What is your nationality?</GdsFieldsetHeading>
             </GdsFieldsetLegend>
 
-            <GdsCheckboxes T="string" Options="@countryOptions" Name="Countries" OnChanged="OnCountriesChanged" />
-        </GdsFieldsetGroup>
-        <p class="govuk-body">Selected countries: @string.Join(", ", model.Countries)</p>
-    </GdsFormGroup>
+            <GdsHint>If you have dual nationality, select all options that are relevant to you</GdsHint>
+            <GdsErrorMessage />
 
+            <GdsCheckboxes>
+                <GdsCheckboxItem>
+                    <GdsInputCheckbox @bind-Value="model.IsBritish" />
+                    <GdsCheckboxLabel Text="British" />
+                    <GdsCheckboxHint>including English, Scottish, Welsh and Northern Irish</GdsCheckboxHint>
+                </GdsCheckboxItem>
+                <GdsCheckboxItem>
+                    <GdsInputCheckbox @bind-Value="model.IsIrish" />
+                    <GdsCheckboxLabel Text="Irish" />
+                </GdsCheckboxItem>
+                <GdsCheckboxItem>
+                    <GdsInputCheckbox @bind-Value="model.IsOther" />
+                    <GdsCheckboxLabel Text="Citizen of another country" />
+                </GdsCheckboxItem>
+            </GdsCheckboxes>
+        </GdsFieldsetGroup>
+    </GdsFormGroup>
+    <p class="govuk-body">
+        Selected nationality (model):
+        @nameof(model.IsBritish) = @model.IsBritish, @nameof(model.IsIrish) = @model.IsIrish, @nameof(model.IsOther) = @model.IsOther
+    </p>
+    @* <p class="govuk-body">Selected radio buttons (bools): @string.Join(", ", SelectedNationalities)</p> *@
+
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 @code {
     private CheckboxesModel model = new();
-    private EditContext _editContext = default!;
+    private EditContext? editContext;
 
-    private IReadOnlyCollection<GdsOptionItem<int>> contactTypeOptions = [
-        new ("contactTypePhone", "Phone", 1),
-        new ("contactTypeEmail", "Email", 2),
-        new ("contactTypeText", "Text message", 3),
-        new ("contactTypePost", "Post", 4),
+    // pretend database table of waste types, with Id and Label
+    private readonly static Guid OtherWasteTypeId = Guid.NewGuid();
+    private record WasteType(Guid Id, string Label);
+    private List<WasteType> wasteTypesFromDatabase = [
+        new(Guid.NewGuid(), "Waste from animal carcasses"),
+        new(Guid.NewGuid(), "Waste from mines or quarries"),
+        new(Guid.NewGuid(), "Farm or agricultural waste"),
+        new(OtherWasteTypeId, "Other"),
     ];
 
-    private IReadOnlyCollection<GdsOptionItem<string>> interestOptions = [
-        new ("interestTechnology", "Technology", "technology"),
-        new ("interestScience", "Science", "science"),
-        new ("interestArts", "Arts and culture", "arts"),
-        new ("interestSports", "Sports", "sports"),
-        new ("interestTravel", "Travel", "travel"),
-    ];
+    // can't use <Enum, bool> or <Guid, bool> if it binds to InputCheckbox Value. Blazor throws errors.
+    private Dictionary<string, bool> SelectedWasteTypes = [];
+    private Dictionary<int, bool> SelectedContactPreferences { get; set; } = [];
 
-    private IReadOnlyCollection<GdsOptionItem<string>> countryOptions = [
-        new ("countryFrance", "France", "france"),
-        new ("countryPortugal", "Portugal", "portugal"),
-        new ("countrySpain", "Spain", "spain"),
-        new ("countryNone", "No, I will not be travelling to any of these countries", "none", isExclusive: true),
-    ];
+    public enum ContactPreferencesEnum
+    {
+        Email,
+        Phone,
+        Text,
+    }
 
     protected override void OnInitialized()
     {
-        _editContext = new(model);
-        _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
 
-        // Update checkbox options from model
-        foreach (var option in contactTypeOptions)
-        {
-            option.Selected = model.ContactTypes.Contains(option.Value);
-        }
-        foreach (var option in interestOptions)
-        {
-            option.Selected = model.Interests.Contains(option.Value);
-        }
-        foreach (var option in countryOptions)
-        {
-            option.Selected = model.Countries.Contains(option.Value);
-        }
+        // set up the selected waste types (string, bool dictionary)
+        SelectedWasteTypes = wasteTypesFromDatabase.ToDictionary(o => o.Id.ToString("N"), _ => false);
+        // set up the selected contact preferences (int, bool dictionary)
+        SelectedContactPreferences = Enum.GetValues<ContactPreferencesEnum>().ToDictionary(o => (int)o, _ => false);
     }
 
-    // Update model from checkbox option
-    private void OnContactTypesChanged(GdsOptionItem<int> option)
+    private void OnSubmit()
     {
-        if (option.Selected)
+        editContext?.Validate();
+    }
+
+    private void OnWasteTypeChanged(bool isChecked, Guid wasteId)
+    {
+        // update the model using the selected waste
+        if (isChecked)
         {
-            model.ContactTypes.Add(option.Value);
+            if (!model.Waste.Contains(wasteId))
+            {
+                model.Waste.Add(wasteId);
+            }
         }
         else
         {
-            model.ContactTypes.Remove(option.Value);
+            model.Waste.Remove(wasteId);
         }
     }
 
-    // Update model from checkbox option
-    private void OnInterestsChanged(GdsOptionItem<string> option)
+    private void OnContactPreferencesChanged(bool isChecked, ContactPreferencesEnum contactPreference)
     {
-        if (option.Selected)
+        // update the model using the selected contact preference
+        if (isChecked)
         {
-            model.Interests.Add(option.Value);
+            if (!model.ContactPreferences.Contains(contactPreference))
+            {
+                model.ContactPreferences.Add(contactPreference);
+            }
         }
         else
         {
-            model.Interests.Remove(option.Value);
-        }
-    }
-
-    // Update model from checkbox option
-    private void OnCountriesChanged(GdsOptionItem<string> option)
-    {
-        if (option.Selected)
-        {
-            model.Countries.Add(option.Value);
-        }
-        else
-        {
-            model.Countries.Remove(option.Value);
+            model.ContactPreferences.Remove(contactPreference);
         }
     }
 
     public class CheckboxesModel
     {
-        public List<int> ContactTypes { get; set; } = [];
-        public List<string> Interests { get; set; } = [];
-        public List<string> Countries { get; set; } = [];
+        [Required]
+        [MinLength(1, ErrorMessage = "Select types of waste transported, or select 'Other'")]
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public List<Guid> Waste { get; set; } = [];
+
+        [Required]
+        [MinLength(1, ErrorMessage = "Select how you would like to be contacted")]
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public List<ContactPreferencesEnum> ContactPreferences { get; set; } = [];
+
+        [Required(ErrorMessage = "Enter your email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? EmailAddress { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool IsBritish { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool IsIrish { get; set; }
+
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool IsOther { get; set; }
     }
 }
