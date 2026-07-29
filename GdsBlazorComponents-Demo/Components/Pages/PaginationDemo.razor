@@ -33,18 +33,29 @@
 
         <GdsGridColumn Width="GdsGridColumnWidth.OneThird">
             <EditForm EditContext="@_editContext" FormName="pagination">
-                <GdsFormGroup For="() => _model.UseBlockStyle">
+                <GdsFormGroup>
                     <GdsFieldsetGroup LegendTextSize="GdsSize.Medium">
                         <GdsFieldsetLegend>
                             <GdsFieldsetHeading Level="2">Options</GdsFieldsetHeading>
                         </GdsFieldsetLegend>
 
                         <GdsErrorMessage />
-                        <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
+
+                        <GdsCheckboxes Smaller>
+                            <GdsCheckboxItem>
+                                <GdsInputCheckbox @bind-Value="@_model.UseBlockStyle" OnChanged="UpdateLabels" />
+                                <GdsCheckboxLabel Text="Block style" />
+                            </GdsCheckboxItem>
+                            <GdsCheckboxItem>
+                                <GdsInputCheckbox @bind-Value="@_model.UseLabels" OnChanged="UpdateLabels" />
+                                <GdsCheckboxLabel Text="Use labels" />
+                                <GdsCheckboxHint>with block style</GdsCheckboxHint>
+                            </GdsCheckboxItem>
+                        </GdsCheckboxes>
                     </GdsFieldsetGroup>
                 </GdsFormGroup>
 
-                <GdsFormGroup For="() => _model.TotalPages">
+                <GdsFormGroup>
                     <GdsLabel Text="Total pages" />
                     <GdsErrorMessage />
                     <GdsSelect T="int" @bind-Value="_model.TotalPages" @bind-Value:after="OnTotalPagesChanged" >
@@ -71,9 +82,6 @@
     private string? _previousLabel;
     private string? _nextLabel;
 
-    private GdsOptionItem<bool> _optionUseBlockStyle = new("use-block-style", "Block style", value: true);
-    private GdsOptionItem<bool> _optionUseBlockLabels = new("use-block-labels", "Use labels", value: true, hint: "with block style");
-
     protected override void OnInitialized()
     {
         if (_model is null)
@@ -90,8 +98,6 @@
             _editContext = new(_model);
             _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
 
-            _optionUseBlockStyle.Selected = _model.UseBlockStyle;
-            _optionUseBlockLabels.Selected = _model.UseLabels;
             UpdateLabels();
         }
     }
@@ -118,25 +124,6 @@
             }
         }
         UpdateLabels();
-
-        return Task.CompletedTask;
-    }
-
-    // update model from options
-    private Task OnChangedOptions(GdsOptionItem<bool> option)
-    {
-        if (_model is not null)
-        {
-            if (option.Id == _optionUseBlockStyle.Id)
-            {
-                _model.UseBlockStyle = option.Selected;
-            }
-            else if (option.Id == _optionUseBlockLabels.Id)
-            {
-                _model.UseLabels = option.Selected;
-            }
-            UpdateLabels();
-        }
 
         return Task.CompletedTask;
     }
