@@ -23,8 +23,15 @@
 
 <GdsHeading Level="3">Parameters</GdsHeading>
 <EditForm Model="@_model" FormName="MainWrapper">
-    <GdsFormGroup For="() => _model.AutoSpacing">
-        <GdsCheckbox T="bool" Option="@_autoSpacingOption" Name="AutoSpacing" OnChanged="OnAutoSpacingChanged" />
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsCheckboxes Smaller>
+                <GdsCheckboxItem>
+                    <GdsInputCheckbox @bind-Value="@_model.AutoSpacing" />
+                    <GdsCheckboxLabel Text="Auto spacing" />
+                </GdsCheckboxItem>
+            </GdsCheckboxes>
+        </GdsFieldsetGroup>
     </GdsFormGroup>
 </EditForm>
 
@@ -38,12 +45,5 @@
     private class MainWrapperModel
     {
         public bool AutoSpacing { get; set; }
-    }
-
-    private GdsOptionItem<bool> _autoSpacingOption = new(id: "auto-spacing", label: "Auto spacing", value: false);
-
-    private void OnAutoSpacingChanged(GdsOptionItem<bool> option)
-    {
-        _model.AutoSpacing = option.Selected;
     }
 }
