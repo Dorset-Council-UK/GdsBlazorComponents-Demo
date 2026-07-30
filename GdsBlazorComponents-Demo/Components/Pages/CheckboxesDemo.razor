@@ -38,9 +38,9 @@
                         <GdsCheckboxDivider />
 
                         <GdsCheckboxItem>
-                            <GdsInputCheckbox @bind-Value="@SelectedWasteTypes[key]" OnChanged="isChecked => OnWasteTypeChanged(isChecked, wasteId)" />
+                            <GdsInputCheckbox @bind-Value="@SelectedWasteTypes[key]" OnChanged="isChecked => OnWasteTypeChanged(isChecked, wasteId)" Exclusive />
                             <GdsCheckboxLabel Text="@wasteLabel" />
-                            <GdsCheckboxHint>I live in another country</GdsCheckboxHint>
+                            <GdsCheckboxHint>other type of waste which is not listed</GdsCheckboxHint>
                         </GdsCheckboxItem>
                     }
                     else
@@ -143,7 +143,6 @@
         Selected nationality (model):
         @nameof(model.IsBritish) = @model.IsBritish, @nameof(model.IsIrish) = @model.IsIrish, @nameof(model.IsOther) = @model.IsOther
     </p>
-    @* <p class="govuk-body">Selected radio buttons (bools): @string.Join(", ", SelectedNationalities)</p> *@
 
     <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
