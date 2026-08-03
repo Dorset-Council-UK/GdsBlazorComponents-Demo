@@ -14,6 +14,9 @@
 <GdsHeading Level="2">Example</GdsHeading>
 
 <EditForm EditContext="@editContext" OnValidSubmit="@OnSubmit" FormName="RadioDemo">
+    <DataAnnotationsValidator />
+    <GdsErrorSummary />
+
     <GdsFormGroup>
         <GdsFieldsetGroup>
             <GdsFieldsetLegend>
@@ -48,6 +51,15 @@
     private RadioModel model = new();
     private EditContext? editContext;
     private bool submitted = false;
+
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
 
     private void OnSubmit()
     {
