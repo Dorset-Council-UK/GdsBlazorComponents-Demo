@@ -56,11 +56,11 @@
     </GdsFormGroup>
     <p class="govuk-body">
         Selected waste (model):
-        <p>@string.Join(", ", model.Waste)</p>
+        @string.Join(", ", model.Waste)
     </p>
     <p class="govuk-body">
         Selected radio buttons (dictionary&lt;string, bool&gt;):
-        <p>@string.Join(", ", SelectedWasteTypes.Select(kvp => $"[{kvp.Key[..8]}..., {kvp.Value}]"))</p>
+        @string.Join(", ", SelectedWasteTypes.Select(kvp => $"[{kvp.Key[..8]}..., {kvp.Value}]"))
     </p>
 
     <GdsHeading Level="3">Checkboxes from Enum, and conditional email</GdsHeading>
