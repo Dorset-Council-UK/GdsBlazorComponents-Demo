@@ -21,7 +21,7 @@
 <EditForm Model="@_model" FormName="HeadingForm">
     <GdsGridRow>
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
-            <GdsFormGroup For="() => _model.Level">
+            <GdsFormGroup>
                 <GdsLabel Text="Level" />
                 <GdsSelect T="byte" @bind-Value="@_model.Level">
                     <option value="1" selected="@(_model.Level == 1)">1</option>
@@ -35,7 +35,7 @@
         </GdsGridColumn>
 
         <GdsGridColumn Widths="[GdsGridColumnWidth.Full, GdsGridColumnWidth.OneQuarterFromDesktop]">
-            <GdsFormGroup For="() => _model.Size">
+            <GdsFormGroup>
                 <GdsLabel Text="Size" />
                 <GdsSelect T="GdsSize?" @bind-Value="@_model.Size">
                     <option value="" selected="@(_model.Size == null)">Auto</option>
