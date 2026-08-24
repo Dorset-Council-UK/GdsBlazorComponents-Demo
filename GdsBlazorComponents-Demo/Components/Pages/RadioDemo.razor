@@ -13,47 +13,64 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit" FormName="radio">
-    <GdsFormGroup For="() => model.Agreement">
-        <InputRadioGroup @bind-Value="model.Agreement">
-            <GdsFieldsetGroup>
-                <Heading>
-                    <GdsHeading Level="2" class="govuk-fieldset__heading">Do you agree?</GdsHeading>
-                </Heading>
-                <Content>
-                    <div class="govuk-radios" data-module="govuk-radios">
-                        <GdsRadio Option="@yesOption" />
-                        <GdsRadio Option="@noOption" />
-                    </div>
-                </Content>
-            </GdsFieldsetGroup>
-        </InputRadioGroup>
+<EditForm EditContext="@editContext" OnValidSubmit="@OnSubmit" FormName="RadioDemo">
+    <DataAnnotationsValidator />
+    <GdsErrorSummary />
+
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsFieldsetLegend>
+                <GdsFieldsetHeading Level="2">Do you agree?</GdsFieldsetHeading>
+            </GdsFieldsetLegend>
+
+            <GdsRadios @bind-Value="model.Agreement">
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@("yes")" />
+                    <GdsRadioLabel Text="Yes, I agree" />
+                </GdsRadioItem>
+                <GdsRadioItem>
+                    <GdsInputRadio Value="@("no")" />
+                    <GdsRadioLabel Text="No, I don't agree" />
+                </GdsRadioItem>
+            </GdsRadios>
+        </GdsFieldsetGroup>
     </GdsFormGroup>
 
-    <GdsButton PreventDoubleClick="@true">Submit</GdsButton>
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
-<div class="govuk-!-margin-top-6">
-    @if (submitted)
-    {
+@if (submitted)
+{
+    <div class="govuk-!-margin-top-6">
         <GdsHeading Level="3">Form Submitted</GdsHeading>
-    }
-    <p class="govuk-body">Agreement: @model.Agreement</p>
-</div>
+        <p class="govuk-body">Agreement: @model.Agreement</p>
+    </div>
+}
 
 @code {
     private RadioModel model = new();
+    private EditContext? editContext;
     private bool submitted = false;
-    private GdsOptionItem<string> yesOption = new("agree-yes", "Yes, I agree", "yes");
-    private GdsOptionItem<string> noOption = new("agree-no", "No, I don't agree", "no");
 
-    private void HandleValidSubmit()
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
+
+    private void OnSubmit()
     {
         submitted = true;
+        editContext?.Validate();
     }
 
     public class RadioModel
     {
-        public string Agreement { get; set; } = "";
+        [Required(ErrorMessage = "Select whether you agree")]
+        [GdsFieldErrorClass(GdsFieldTypes.Radio)]
+        public string? Agreement { get; set; }
     }
 }

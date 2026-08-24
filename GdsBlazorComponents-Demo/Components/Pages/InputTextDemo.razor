@@ -1,4 +1,5 @@
 @page "/input-text"
+@rendermode InteractiveServer
 
 <PageTitle>Input Text - GDS Components Demo</PageTitle>
 
@@ -12,49 +13,74 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<EditForm Model="@model">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="InputTextDemo">
     <DataAnnotationsValidator />
-    
-    <GdsFormGroup For="() => model.FullName">
+    <GdsErrorSummary />
+
+    <GdsFormGroup>
         <GdsLabel Text="Your name" />
+        <GdsErrorMessage />
         <GdsInputText @bind-Value="model.FullName" class="govuk-input govuk-input--width-50" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Email">
+    <GdsFormGroup>
         <GdsLabel Text="Email address" />
         <GdsHint>We'll only use this to send you updates</GdsHint>
+        <GdsErrorMessage />
         <GdsInputText @bind-Value="model.Email" class="govuk-input govuk-input--width-50" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.PhoneNumber">
-        <GdsLabel Text="Phone number" />
+    <GdsFormGroup>
+        <GdsLabel Text="Phone number (optional)" />
         <GdsHint>For international numbers include the country code</GdsHint>
-        <GdsInputText @bind-Value="model.PhoneNumber" class="govuk-input govuk-input--width-10" />
+        <GdsErrorMessage />
+        <GdsInputText Id="phone-number" @bind-Value="model.PhoneNumber" class="govuk-input govuk-input--width-10" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Postcode">
+    <GdsFormGroup>
         <GdsLabel Text="Postcode" />
+        <GdsErrorMessage />
         <GdsInputText @bind-Value="model.Postcode" class="govuk-input govuk-input--width-10" />
     </GdsFormGroup>
 
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 
 @code {
     private InputTextModel model = new();
+    private EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
+
+    private void OnSubmit()
+    {
+        editContext?.Validate();
+    }
 
     public class InputTextModel
     {
         [Required(ErrorMessage = "Enter your full name")]
-        public string FullName { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? FullName { get; set; }
 
         [Required(ErrorMessage = "Enter your email address")]
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
-        public string Email { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? Email { get; set; }
 
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Enter your postcode")]
-        public string Postcode { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? Postcode { get; set; }
     }
 }

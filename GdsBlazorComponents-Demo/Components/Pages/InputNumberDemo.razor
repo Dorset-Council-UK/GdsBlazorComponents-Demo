@@ -16,7 +16,7 @@
     <DataAnnotationsValidator />
 
     <GdsHeading Level="3">Whole number example</GdsHeading>
-    <GdsFormGroup For="() => model.AccountNumberText" Id="account-number">
+    <GdsFormGroup>
         <GdsLabel Text="What is your account number?" />
         <GdsHint>Must be between 6 and 8 digits long</GdsHint>
         <GdsErrorMessage />
@@ -24,7 +24,7 @@
     </GdsFormGroup>
 
     <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Decimal number with suffix</GdsHeading>
-    <GdsFormGroup For="() => model.WeightText" Id="weight">
+    <GdsFormGroup>
         <GdsLabel Text="How much does it weigh?" />
         <GdsHint>Weight, in kilograms</GdsHint>
         <GdsErrorMessage />
@@ -35,7 +35,7 @@
     </GdsFormGroup>
 
     <GdsHeading Level="3" AdditionalCssClasses="govuk-!-margin-top-8">Decimal number with prefix</GdsHeading>
-    <GdsFormGroup For="() => model.AmountText" Id="amount">
+    <GdsFormGroup>
         <GdsLabel Text="What is the amount?" />
         <GdsHint>Enter the amount in pounds</GdsHint>
         <GdsErrorMessage />

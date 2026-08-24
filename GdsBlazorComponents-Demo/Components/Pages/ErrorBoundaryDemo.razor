@@ -1,0 +1,43 @@
+@page "/error-boundary"
+@rendermode InteractiveServer
+
+<PageTitle>Error Boundary - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<GdsHeading Level="1">Error boundary</GdsHeading>
+
+<div class="govuk-body">
+    <div>Use the error boundary component to catch unhandled exceptions in your Blazor components.</div>
+    <div>You can wrap specific pages, parts of a page, or your entire layout, depending on your needs.</div>
+</div>
+
+<GdsHeading Level="2">Example</GdsHeading>
+
+<GdsErrorBoundary ShowErrorMessage="@showErrorMessage" ShowHelpLink="@showHelpLink" ShowRetryButton="@showRetryButton">
+    <GdsButton IsSubmit="@false" PreventDoubleClick Text="Test boundary" OnClick="TestBoundary" />
+</GdsErrorBoundary>
+
+
+@code {
+    [Inject]
+    private IWebHostEnvironment? Env { get; set; }
+    private bool showErrorMessage;
+    private bool showHelpLink;
+    private bool showRetryButton;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (Env is not null)
+        {
+            showErrorMessage = showHelpLink = showRetryButton = !Env.IsProduction();
+        }
+    }
+
+    private void TestBoundary()
+    {
+        throw new Exception("This is a test exception thrown from the error boundary demo page");
+    }
+}

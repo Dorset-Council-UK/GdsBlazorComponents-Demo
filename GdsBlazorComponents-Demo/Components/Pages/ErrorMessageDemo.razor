@@ -1,4 +1,5 @@
 @page "/error-message"
+@rendermode InteractiveServer
 
 <PageTitle>Error Message - GDS Components Demo</PageTitle>
 
@@ -12,45 +13,36 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<p class="govuk-body">Submit the form with invalid values to see inline error messages and an <a href="/error-summary">error summary</a></p>
+<p class="govuk-body">Submit the form with invalid values to see inline error messages and an <GdsLink Href="/error-summary">error summary</GdsLink></p>
 
-<EditForm EditContext="editContext" OnValidSubmit="@HandleValidSubmit" FormName="ErrorMessageExampleForm">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="ErrorMessageExampleForm">
     <DataAnnotationsValidator />
     <GdsErrorSummary />
 
-    <GdsFormGroup For="() => model.FullName">
+    <GdsFormGroup>
         <GdsLabel Text="What is your full name?" />
         <GdsErrorMessage />
         <GdsInputText @bind-Value="model.FullName" class="govuk-input govuk-input--width-20" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Email">
+    <GdsFormGroup>
         <GdsLabel Text="What is your email address?" />
         <GdsErrorMessage />
         <GdsInputText @bind-Value="model.Email" class="govuk-input govuk-input--width-20" />
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model.Age">
-        <GdsLabel Text="What is your age?" />
+    <GdsFormGroup>
+        <GdsLabel Text="What is your age? (optional)" />
         <GdsErrorMessage />
         <GdsInputNumber @bind-Value="model.AgeText" NumberValue="model.Age" class="govuk-input govuk-input--width-3" />
     </GdsFormGroup>
 
-    <button type="submit" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">Submit</button>
-
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
-
-@if (submitted)
-{
-    <GdsNotificationBanner BannerTitle="Form submitted successfully">
-        This is in a notification, just cos'
-    </GdsNotificationBanner>
-}
 
 @code {
     private ErrorSummaryModel model = new();
     private EditContext? editContext;
-    private bool submitted = false;
 
     protected override void OnInitialized()
     {
@@ -59,23 +51,23 @@
         editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
     }
 
-    private void HandleValidSubmit()
+    private void OnSubmit()
     {
-        submitted = true;
+        editContext?.Validate();
     }
 
     public class ErrorSummaryModel
     {
         [Required(ErrorMessage = "Enter your full name")]
-        public string FullName { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? FullName { get; set; }
 
         [Required(ErrorMessage = "Enter your email address")]
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
-        public string Email { get; set; } = "";
+        [GdsFieldErrorClass(GdsFieldTypes.Input)]
+        public string? Email { get; set; }
 
         public string? AgeText { get; set; }
-
-        [Required(ErrorMessage = "Enter your age")]
         public int? Age { get; set; }
     }
 }

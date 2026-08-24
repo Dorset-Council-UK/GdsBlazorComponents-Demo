@@ -1,4 +1,5 @@
 @page "/input-date"
+@rendermode InteractiveServer
 
 <PageTitle>Input Date - GDS Components Demo</PageTitle>
 
@@ -12,34 +13,258 @@
 
 <GdsHeading Level="2">Example</GdsHeading>
 
-<EditForm Model="@model">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="InputDateDemo">
     <DataAnnotationsValidator />
+    <GdsErrorSummary />
     
-    <GdsFormGroup For="() => model.DateOfBirth">
-        <GdsLabel Text="What is your date of birth" />
-        <GdsInputDate For="() => model.DateOfBirth" />
+    <GdsFormGroup>
+        <GdsInputDate For="() => model.DateOfBirth" IsDateOfBirth>
+            <Heading>
+                <GdsFieldsetHeading Level="3">What is your date of birth</GdsFieldsetHeading>
+            </Heading>
+            <Hint>For example, 27 3 2007</Hint>
+        </GdsInputDate>
     </GdsFormGroup>
-</EditForm>
+    
+    <GdsFormGroup>
+        <GdsInputDate For="() => model.AppointmentDate">
+            <Heading>
+                <GdsFieldsetHeading Level="3">When do you want an appointment for?</GdsFieldsetHeading>
+            </Heading>
+            <Hint>For example, 27 3 2007</Hint>
+        </GdsInputDate>
+    </GdsFormGroup>
 
-<GdsHeading Level="2">Example with header and hint</GdsHeading>
-<EditForm Model="@model">
-    <GdsInputDate For="() => model.AppointmentDate">
-        <Heading>
-            <GdsHeading Level="1" class="govuk-fieldset__heading">When do you want an appointment for?</GdsHeading>
-        </Heading>
-        <Hint>For example, 12 3 2024</Hint>
-    </GdsInputDate>
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
 
 @code {
     private InputDateModel model = new();
+    private EditContext? editContext;
+    private ValidationMessageStore messageStore = default!;
+
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+            messageStore = new ValidationMessageStore(editContext);
+        }
+    }
+
+    private void OnSubmit()
+    {
+        messageStore.Clear();
+
+        if (editContext?.Validate() == true)
+        {
+            var currentYear = DateTimeOffset.UtcNow.Year;
+            var minYear = currentYear - 100;
+            var maxYear = currentYear + 1;
+
+            // Date of birth
+            if (!ValidateDob_Day() || !ValidateDob_Month() || !ValidateDob_Year(minYear, maxYear) || !ValidateDob_Date())
+            {
+                editContext.NotifyValidationStateChanged();
+                return;
+            }
+
+            // Appointment date
+            if (!ValidateAppointment_Day() || !ValidateAppointment_Month() || !ValidateAppointment_Year(minYear, maxYear) || !ValidateAppointment_Date())
+            {
+                editContext.NotifyValidationStateChanged();
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Basic date of birth, day validation
+    /// </summary>
+    private bool ValidateDob_Day()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.DateOfBirth.DayText);
+        if (model.DateOfBirth.DayText is null)
+        {
+            messageStore.Add(fi, "Enter the day");
+            return false;
+        }
+        if (model.DateOfBirth.Day is null)
+        {
+            messageStore.Add(fi, "Day must be number");
+            return false;
+        }
+        if (model.DateOfBirth.Day < 1 || model.DateOfBirth.Day > 31)
+        {
+            messageStore.Add(fi, "Day must be between 1 and 31");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic date of birth, month validation
+    /// </summary>
+    private bool ValidateDob_Month()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.DateOfBirth.MonthText);
+        if (model.DateOfBirth.MonthText is null)
+        {
+            messageStore.Add(fi, "Enter the month");
+            return false;
+        }
+        if (model.DateOfBirth.Month is null)
+        {
+            messageStore.Add(fi, "Month must be number");
+            return false;
+        }
+        if (model.DateOfBirth.Month < 1 || model.DateOfBirth.Month > 12)
+        {
+            messageStore.Add(fi, "Month must be between 1 and 12");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic date of birth, year validation
+    /// </summary>
+    private bool ValidateDob_Year(int minYear, int maxYear)
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.DateOfBirth.YearText);
+        if (model.DateOfBirth.YearText is null)
+        {
+            messageStore.Add(fi, "Enter the year");
+            return false;
+        }
+        if (model.DateOfBirth.Year is null)
+        {
+            messageStore.Add(fi, "Year must be number");
+            return false;
+        }
+        if (model.DateOfBirth.Year < minYear || model.DateOfBirth.Year > maxYear)
+        {
+            messageStore.Add(fi, $"Year must be between {minYear} and {maxYear}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic date of birth, full date validation
+    /// </summary>
+    private bool ValidateDob_Date()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.DateOfBirth);
+        if (model.DateOfBirth.DateUtc is null)
+        {
+            messageStore.Add(fi, "Enter a valid date");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, day validation
+    /// </summary>
+    private bool ValidateAppointment_Day()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.DayText);
+        if (model.AppointmentDate.DayText is null)
+        {
+            messageStore.Add(fi, "Enter the day");
+            return false;
+        }
+        if (model.AppointmentDate.Day is null)
+        {
+            messageStore.Add(fi, "Day must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Day < 1 || model.AppointmentDate.Day > 31)
+        {
+            messageStore.Add(fi, "Day must be between 1 and 31");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, month validation
+    /// </summary>
+    private bool ValidateAppointment_Month()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.MonthText);
+        if (model.AppointmentDate.MonthText is null)
+        {
+            messageStore.Add(fi, "Enter the month");
+            return false;
+        }
+        if (model.AppointmentDate.Month is null)
+        {
+            messageStore.Add(fi, "Month must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Month < 1 || model.AppointmentDate.Month > 12)
+        {
+            messageStore.Add(fi, "Month must be between 1 and 12");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, year validation
+    /// </summary>
+    private bool ValidateAppointment_Year(int minYear, int maxYear)
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.YearText);
+        if (model.AppointmentDate.YearText is null)
+        {
+            messageStore.Add(fi, "Enter the year");
+            return false;
+        }
+        if (model.AppointmentDate.Year is null)
+        {
+            messageStore.Add(fi, "Year must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Year < minYear || model.AppointmentDate.Year > maxYear)
+        {
+            messageStore.Add(fi, $"Year must be between {minYear} and {maxYear}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, full date validation
+    /// </summary>
+    private bool ValidateAppointment_Date()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate);
+        if (model.AppointmentDate.DateUtc is null)
+        {
+            messageStore.Add(fi, "Enter a valid date");
+            return false;
+        }
+
+        return true;
+    }
 
     public class InputDateModel
     {
-        [Required(ErrorMessage = "Enter your date of birth")]
+        [GdsFieldErrorClass(GdsFieldTypes.Date)]
         public GdsDate DateOfBirth { get; set; } = new();
 
+        [GdsFieldErrorClass(GdsFieldTypes.Date)]
         public GdsDate AppointmentDate { get; set; } = new();
-
     }
 }

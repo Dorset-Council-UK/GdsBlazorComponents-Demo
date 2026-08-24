@@ -33,22 +33,40 @@
 
         <GdsGridColumn Width="GdsGridColumnWidth.OneThird">
             <EditForm EditContext="@_editContext" FormName="pagination">
-                <GdsFormGroup For="() => _model.UseBlockStyle">
+                <GdsFormGroup>
                     <GdsFieldsetGroup LegendTextSize="GdsSize.Medium">
-                        <Heading>
-                            <GdsHeading Level="2" class="govuk-fieldset__heading">Options</GdsHeading>
-                        </Heading>
-                        <Content>
-                            <GdsErrorMessage />
-                            <GdsCheckboxes T="bool" Options="@([_optionUseBlockStyle, _optionUseBlockLabels])" Name="options" Smaller OnChanged="OnChangedOptions" />
-                        </Content>
+                        <GdsFieldsetLegend>
+                            <GdsFieldsetHeading Level="2">Options</GdsFieldsetHeading>
+                        </GdsFieldsetLegend>
+
+                        <GdsErrorMessage />
+
+                        <GdsCheckboxes Smaller>
+                            <GdsCheckboxItem>
+                                <GdsInputCheckbox @bind-Value="@_model.UseBlockStyle" OnChanged="UpdateLabels" />
+                                <GdsCheckboxLabel Text="Block style" />
+                            </GdsCheckboxItem>
+                            <GdsCheckboxItem>
+                                <GdsInputCheckbox @bind-Value="@_model.UseLabels" OnChanged="UpdateLabels" />
+                                <GdsCheckboxLabel Text="Use labels" />
+                                <GdsCheckboxHint>with block style</GdsCheckboxHint>
+                            </GdsCheckboxItem>
+                        </GdsCheckboxes>
                     </GdsFieldsetGroup>
                 </GdsFormGroup>
 
-                <GdsFormGroup For="() => _model.TotalPages">
+                <GdsFormGroup>
                     <GdsLabel Text="Total pages" />
                     <GdsErrorMessage />
-                    <GdsSelect Options="@_totalPagesOptions" T="int" OnChange="OnTotalPagesChanged" />
+                    <GdsSelect T="int" @bind-Value="_model.TotalPages" @bind-Value:after="OnTotalPagesChanged" >
+                        <option value="3" selected="@(_model.TotalPages == 3)">3</option>
+                        <option value="5" selected="@(_model.TotalPages == 5)">5</option>
+                        <option value="10" selected="@(_model.TotalPages == 10)">10</option>
+                        <option value="20" selected="@(_model.TotalPages == 20)">20</option>
+                        <option value="42" selected="@(_model.TotalPages == 42)">42</option>
+                        <option value="50" selected="@(_model.TotalPages == 50)">50</option>
+                        <option value="100" selected="@(_model.TotalPages == 100)">100</option>
+                    </GdsSelect>
                 </GdsFormGroup>
             </EditForm>
         </GdsGridColumn>
@@ -63,19 +81,6 @@
     private EditContext? _editContext;
     private string? _previousLabel;
     private string? _nextLabel;
-
-    private IReadOnlyCollection<GdsOptionItem<int>> _totalPagesOptions = [
-        new ("total-pages-three", "3", 3),
-        new ("total-pages-five", "5", 5),
-        new ("total-pages-ten", "10", 10),
-        new ("total-pages-twenty", "20", 20),
-        new ("total-pages-forty-two", "42", 42, selected: true),
-        new ("total-pages-fifty", "50", 50),
-        new ("total-pages-one-hundred", "100", 100),
-    ];
-
-    private GdsOptionItem<bool> _optionUseBlockStyle = new("use-block-style", "Block style", value: true);
-    private GdsOptionItem<bool> _optionUseBlockLabels = new("use-block-labels", "Use labels", value: true, hint: "with block style");
 
     protected override void OnInitialized()
     {
@@ -93,8 +98,6 @@
             _editContext = new(_model);
             _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
 
-            _optionUseBlockStyle.Selected = _model.UseBlockStyle;
-            _optionUseBlockLabels.Selected = _model.UseLabels;
             UpdateLabels();
         }
     }
@@ -111,36 +114,16 @@
         return Task.CompletedTask;
     }
 
-    private Task OnTotalPagesChanged(GdsOptionItem<int> option)
+    private Task OnTotalPagesChanged()
     {
         if (_model is not null)
         {
-            _model.TotalPages = option.Value;
             if (_model.CurrentPage > _model.TotalPages)
             {
                 _model.CurrentPage = _model.TotalPages;
             }
         }
         UpdateLabels();
-
-        return Task.CompletedTask;
-    }
-
-    // update model from options
-    private Task OnChangedOptions(GdsOptionItem<bool> option)
-    {
-        if (_model is not null)
-        {
-            if (option.Id == _optionUseBlockStyle.Id)
-            {
-                _model.UseBlockStyle = option.Selected;
-            }
-            else if (option.Id == _optionUseBlockLabels.Id)
-            {
-                _model.UseLabels = option.Selected;
-            }
-            UpdateLabels();
-        }
 
         return Task.CompletedTask;
     }

@@ -1,8 +1,9 @@
 @page "/input-partial-date"
+@rendermode InteractiveServer
 
 <PageTitle>Input Partial Date - GDS Components Demo</PageTitle>
 
-<GdsBackLink Href="/"></GdsBackLink>
+<GdsBackLink Href="/" />
 
 <GdsHeading Level="1">Input Partial Date</GdsHeading>
 
@@ -21,37 +22,214 @@
     <li>The exact day is not required</li>
 </ul>
 
-<GdsHeading Level="3">Simple example - Month and year</GdsHeading>
-<EditForm Model="@model">
+<EditForm EditContext="editContext" OnSubmit="@OnSubmit" FormName="InputPartialDateDemo">
     <DataAnnotationsValidator />
+    <GdsErrorSummary />
 
-    <GdsFormGroup For="() => model.AppointmentDate">
-        <GdsLabel Text="Date of appointment" />
-        <GdsInputPartialDate For="() => model.AppointmentDate" ShowMonth="true" ShowYear="true" />
+    <GdsHeading Level="3">Simple example (Month and year)</GdsHeading>
+    <GdsFormGroup>
+        <GdsInputPartialDate For="() => model.AppointmentDate" ShowMonth ShowYear>
+            @* <Heading>
+                <GdsFieldsetHeading Level="4">Date of appointment</GdsFieldsetHeading>
+            </Heading>
+            <Hint>For example, 3 2024</Hint> *@
+        </GdsInputPartialDate>
     </GdsFormGroup>
 
+    <GdsHeading Level="3">Example using optional Heading and Hint (Year only)</GdsHeading>
+    <GdsFormGroup>
+        <GdsInputPartialDate For="() => model.YearOfThing" ShowYear>
+            <Heading>
+                <GdsFieldsetHeading Level="4">What year did the thing happen?</GdsFieldsetHeading>
+            </Heading>
+            <Hint>For example 2024</Hint>
+        </GdsInputPartialDate>
+    </GdsFormGroup>
+
+    <GdsButton IsSubmit PreventDoubleClick Text="Validate" />
 </EditForm>
-
-<GdsHeading Level="3">Example using optional Heading and hint</GdsHeading>
-<EditForm Model="@model">
-    <DataAnnotationsValidator />
-
-    <GdsInputPartialDate For="() => model.YearOfThing" ShowYear="true">
-        <Heading>
-            <GdsHeading Level="4" class="govuk-fieldset__heading">What year did the thing happen?</GdsHeading>
-        </Heading>
-        <Hint>For example, 3 2024</Hint>
-    </GdsInputPartialDate>
-
-</EditForm>
-
 
 @code {
     private PartialDateModel model = new();
+    private EditContext? editContext;
+    private ValidationMessageStore messageStore = default!;
+
+    protected override void OnInitialized()
+    {
+        if (editContext is null)
+        {
+            editContext = new(model);
+            editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+            messageStore = new ValidationMessageStore(editContext);
+        }
+    }
+
+    private void OnSubmit()
+    {
+        messageStore.Clear();
+
+        if (editContext?.Validate() == true)
+        {
+            bool notifyValidation = false;
+
+            var currentYear = DateTimeOffset.UtcNow.Year;
+            var minYear = currentYear - 100;
+            var maxYear = currentYear + 1;
+
+            // Appointment date
+            model.AppointmentDate.DayText = "1";
+            bool appointmentNotValid = (!ValidateAppointment_Month() || !ValidateAppointment_Year(minYear, maxYear) || !ValidateAppointment_Date());
+            notifyValidation = notifyValidation || appointmentNotValid;
+
+            // year of thing
+            model.YearOfThing.DayText = "1";
+            model.YearOfThing.MonthText = "1";
+            bool yearOfThingNotValid = (!ValidateThing_Year(minYear, maxYear) || !ValidateThing_Date());
+            notifyValidation = notifyValidation || yearOfThingNotValid;
+
+            if (notifyValidation)
+            {
+                editContext.NotifyValidationStateChanged();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Basic appointment, day validation
+    /// </summary>
+    private bool ValidateAppointment_Day()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.DayText);
+        if (model.AppointmentDate.DayText is null)
+        {
+            messageStore.Add(fi, "Enter the day");
+            return false;
+        }
+        if (model.AppointmentDate.Day is null)
+        {
+            messageStore.Add(fi, "Day must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Day < 1 || model.AppointmentDate.Day > 31)
+        {
+            messageStore.Add(fi, "Day must be between 1 and 31");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, month validation
+    /// </summary>
+    private bool ValidateAppointment_Month()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.MonthText);
+        if (model.AppointmentDate.MonthText is null)
+        {
+            messageStore.Add(fi, "Enter the month");
+            return false;
+        }
+        if (model.AppointmentDate.Month is null)
+        {
+            messageStore.Add(fi, "Month must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Month < 1 || model.AppointmentDate.Month > 12)
+        {
+            messageStore.Add(fi, "Month must be between 1 and 12");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, year validation
+    /// </summary>
+    private bool ValidateAppointment_Year(int minYear, int maxYear)
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate.YearText);
+        if (model.AppointmentDate.YearText is null)
+        {
+            messageStore.Add(fi, "Enter the year");
+            return false;
+        }
+        if (model.AppointmentDate.Year is null)
+        {
+            messageStore.Add(fi, "Year must be number");
+            return false;
+        }
+        if (model.AppointmentDate.Year < minYear || model.AppointmentDate.Year > maxYear)
+        {
+            messageStore.Add(fi, $"Year must be between {minYear} and {maxYear}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic appointment, full date validation
+    /// </summary>
+    private bool ValidateAppointment_Date()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.AppointmentDate);
+        if (model.AppointmentDate.DateUtc is null)
+        {
+            messageStore.Add(fi, "Enter a valid date");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic thing, year validation
+    /// </summary>
+    private bool ValidateThing_Year(int minYear, int maxYear)
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.YearOfThing.YearText);
+        if (model.YearOfThing.YearText is null)
+        {
+            messageStore.Add(fi, "Enter the year");
+            return false;
+        }
+        if (model.YearOfThing.Year is null)
+        {
+            messageStore.Add(fi, "Year must be number");
+            return false;
+        }
+        if (model.YearOfThing.Year < minYear || model.YearOfThing.Year > maxYear)
+        {
+            messageStore.Add(fi, $"Year must be between {minYear} and {maxYear}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Basic thing, full date validation
+    /// </summary>
+    private bool ValidateThing_Date()
+    {
+        FieldIdentifier fi = FieldIdentifier.Create(() => model.YearOfThing);
+        if (model.YearOfThing.DateUtc is null)
+        {
+            messageStore.Add(fi, "Enter a valid date");
+            return false;
+        }
+
+        return true;
+    }
 
     public class PartialDateModel
     {
+        [GdsFieldErrorClass(GdsFieldTypes.Date)]
         public GdsDate AppointmentDate { get; set; } = new();
+
+        [GdsFieldErrorClass(GdsFieldTypes.Date)]
         public GdsDate YearOfThing { get; set; } = new();
     }
 }

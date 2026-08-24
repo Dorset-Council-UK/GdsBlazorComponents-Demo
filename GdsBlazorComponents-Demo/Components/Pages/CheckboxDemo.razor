@@ -10,17 +10,36 @@
 <p class="govuk-body">
     Use the checkbox component to let users select one or more options.
 </p>
-<p class="govuk-body">In most cases you will want something more than a single check box, so we recommend you use the <a href="/checkboxes" class="govuk-link">GdsCheckboxes</a> component. Doing this also guarantees good HTML and accessibility.</p>
+<GdsWarning Text="You must use the GdsInputCheckbox component within GdsCheckboxItem" />
+<p class="govuk-body">
+    Even when using a few simple checkboxes they still have to match the GDS design system and accessibility requirements.
+    For best accessibility, the recommended structure is form group > fieldset > checkboxes > checkbox item > checkbox input and label.
+    The <code>GdsInputCheckbox</code> component has been built in a very flexible way, so the demos below show a few different ways you could use it.
+</p>
+<p class="govuk-body">
+    Also see <GdsLink Href="/checkboxes">GdsCheckboxes</GdsLink> component.
+</p>
 
 <GdsHeading Level="2">Example</GdsHeading>
 
 <EditForm Model="@model">
-    <GdsFormGroup For="() => model">
-        <GdsCheckbox T="bool" Option="@terms_option" Name="AcceptTerms" OnChanged="OnTermsChanged" />
+    <GdsFormGroup>
+        <GdsFieldsetGroup>
+            <GdsCheckboxes>
+                <GdsCheckboxItem>
+                    <GdsInputCheckbox @bind-Value="model.AcceptTerms" />
+                    <GdsCheckboxLabel Text="I accept the terms and conditions 111" />
+                    <GdsCheckboxHint>Read the terms before accepting</GdsCheckboxHint>
+                </GdsCheckboxItem>
+            </GdsCheckboxes>
+        </GdsFieldsetGroup>
     </GdsFormGroup>
 
-    <GdsFormGroup For="() => model">
-        <GdsCheckbox T="bool" Option="@emails_option" Name="ReceiveEmails" OnChanged="OnReceiveEmailsChanged" />
+    <GdsFormGroup>
+        <GdsCheckboxItem>
+            <GdsInputCheckbox @bind-Value="model.ReceiveEmails" />
+            <GdsCheckboxLabel Text="Receive emails 222" />
+        </GdsCheckboxItem>
     </GdsFormGroup>
 </EditForm>
 
@@ -31,18 +50,6 @@
 
 @code {
     private CheckboxModel model = new();
-    private GdsOptionItem<bool> terms_option = new("accept-terms", "I accept the terms and conditions", value: false, hint: "This is some hint text");
-    private GdsOptionItem<bool> emails_option = new("receive-emails", "Receive emails", value: false);
-
-    // Update model from checkbox option
-    private void OnTermsChanged(GdsOptionItem<bool> option) => model.AcceptTerms = option.Selected;
-    private void OnReceiveEmailsChanged(GdsOptionItem<bool> option) => model.ReceiveEmails = option.Selected;
-
-    protected override void OnInitialized()
-    {
-        terms_option.Selected = model.AcceptTerms;
-        emails_option.Selected = model.ReceiveEmails;
-    }
 
     public class CheckboxModel
     {
