@@ -14,14 +14,104 @@
 
 <GdsHeading Level="3">Default banner</GdsHeading>
 <GdsNotificationBanner Id="banner-1" BannerTitle="Important">
-    <p>
+        You have 7 days left to send your application.
+        <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
+</GdsNotificationBanner>
+
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@NotificationBannerExample1</code></pre>
+</details>
+
+<GdsHeading Level="3">Success banner</GdsHeading>
+<GdsNotificationBanner Id="banner-2" BannerTitle="Success" NotificationType="GdsNotificationBanner.NotificationTypeOption.success">
+    <GdsHeading Level="4">Training outcome recorded and trainee withdrawn</GdsHeading>
+    <p class="govuk-body">Contact <GdsLink class="govuk-notification-banner__link" Href="#">example@department.gov.uk</GdsLink> if you think there’s a problem.</p>
+</GdsNotificationBanner>
+
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@NotificationBannerExample2</code></pre>
+</details>
+
+<GdsHeading Level="3">Banner with h2 heading and h3 inside content</GdsHeading>
+<GdsNotificationBanner Id="banner-3" BannerTitle="Important" BannerHeadingLevel="2">
+    <GdsHeading Level="3" BaseCssClass="govuk-notification-banner__heading">Training session scheduled</GdsHeading>
+    <p class="govuk-body">We have scheduled your training session for 15 December 2024.</p>
+</GdsNotificationBanner>
+
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@NotificationBannerExample3</code></pre>
+</details>
+
+<GdsHeading Level="3">Banner with paragraph based heading</GdsHeading>
+<GdsNotificationBanner Id="banner-4" BannerTitle="Important" BannerHeadingLevel="2">
+    <p class="govuk-notification-banner__heading">
         You have 7 days left to send your application.
         <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
     </p>
 </GdsNotificationBanner>
 
-<GdsHeading Level="3">Banner with h2 heading and h3 inside content</GdsHeading>
-<GdsNotificationBanner Id="banner-2" BannerTitle="Success" BannerHeadingLevel="2">
-    <GdsHeading Level="3">Training session scheduled</GdsHeading>
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View code example
+        </span>
+    </summary>
+    <pre><code>@NotificationBannerExample4</code></pre>
+</details>
+
+<GdsHeading Level="3">Banner with custom heading size</GdsHeading>
+<GdsNotificationBanner Id="banner-4" BannerTitle="Important" BannerHeadingLevel="2" BannerHeadingSize="GdsSize.ExtraLarge">
+    <p class="govuk-notification-banner__heading">
+        You have 7 days left to send your application.
+        <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
+    </p>
+</GdsNotificationBanner>
+
+@code{
+    private string NotificationBannerExample1 = """
+<GdsNotificationBanner Id="banner-1" BannerTitle="Important">
+        You have 7 days left to send your application.
+        <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
+</GdsNotificationBanner>
+""";
+
+    private string NotificationBannerExample2 = """
+<GdsNotificationBanner Id="banner-2" BannerTitle="Success" NotificationType="GdsNotificationBanner.NotificationTypeOption.success">
+    <GdsHeading Level="4">Training outcome recorded and trainee withdrawn</GdsHeading>
+    <p class="govuk-body">Contact <GdsLink class="govuk-notification-banner__link" Href="#">example@department.gov.uk</GdsLink> if you think there’s a problem.</p>
+</GdsNotificationBanner>
+""";
+
+    private string NotificationBannerExample3 = """
+<GdsNotificationBanner Id="banner-3" BannerTitle="Important" BannerHeadingLevel="2">
+    <GdsHeading Level="3" BaseCssClass="govuk-notification-banner__heading">Training session scheduled</GdsHeading>
     <p class="govuk-body">We have scheduled your training session for 15 December 2024.</p>
 </GdsNotificationBanner>
+}
+""";
+
+    private string NotificationBannerExample4 = """
+<GdsNotificationBanner Id="banner-4" BannerTitle="Important" BannerHeadingLevel="2">
+    <p class="govuk-notification-banner__heading">
+        You have 7 days left to send your application.
+        <GdsLink class="govuk-notification-banner__link" Href="#">View application</GdsLink>.
+    </p>
+</GdsNotificationBanner>
+}
+""";
+}
