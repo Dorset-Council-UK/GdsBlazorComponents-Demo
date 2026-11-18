@@ -1,0 +1,124 @@
+@page "/summary-list"
+@rendermode InteractiveServer
+
+<PageTitle>Summary list - GDS Components Demo</PageTitle>
+
+<GdsBackLink Href="/" />
+
+<GdsHeading Level="1">Summary list</GdsHeading>
+
+<p class="govuk-body">
+    This component allows you to summarise information using the GDS recommendations.
+</p>
+
+<p class="govuk-body">
+    See the <GdsLink Href="/summary-card">summary card component</GdsLink> if you want to use a summary list in a card with a title and actions.
+</p>
+
+@if (_model is not null)
+{
+    <GdsGridRow>
+        <GdsGridColumn Width="GdsGridColumnWidth.ThreeQuarters">
+            <GdsHeading Level="2">Example</GdsHeading>
+
+            <GdsSummaryList NoBorder="@_model.NoBorders">
+                <GdsSummaryListRow NoActions>
+                    <GdsSummaryListKey>Name</GdsSummaryListKey>
+                    <GdsSummaryListValue>Sarah Phillips</GdsSummaryListValue>
+                </GdsSummaryListRow>
+                <GdsSummaryListRow>
+                    <GdsSummaryListKey>Address</GdsSummaryListKey>
+                    <GdsSummaryListValue>72 Guild Street<br>London<br>SE23 6FH</GdsSummaryListValue>
+                    <GdsSummaryListActions>
+                        <GdsLink Href="@NavigationManager.Uri">Change<span class="govuk-visually-hidden"> address</span></GdsLink>
+                    </GdsSummaryListActions>
+                </GdsSummaryListRow>
+                <GdsSummaryListRow>
+                    <GdsSummaryListKey>Contact details</GdsSummaryListKey>
+                    <GdsSummaryListValue>
+                        <p>07700 900457</p>
+                        <p>sarah.phillips@example.com</p>
+                    </GdsSummaryListValue>
+                    <GdsSummaryListActions>
+                        <GdsSummaryListActionsList>
+                            <GdsSummaryListActionsListItem>
+                                <GdsLink Href="@NavigationManager.Uri">Add<span class="govuk-visually-hidden"> contact details</span></GdsLink>
+                            </GdsSummaryListActionsListItem>
+                            <GdsSummaryListActionsListItem>
+                                <GdsLink Href="@NavigationManager.Uri">Change<span class="govuk-visually-hidden"> contact details</span></GdsLink>
+                            </GdsSummaryListActionsListItem>
+                        </GdsSummaryListActionsList>
+                    </GdsSummaryListActions>
+                </GdsSummaryListRow>
+            </GdsSummaryList>
+
+            <GdsHeading Level="2">Example - No actions</GdsHeading>
+
+            <GdsSummaryList NoBorder="@_model.NoBorders">
+                <GdsSummaryListRow>
+                    <GdsSummaryListKey>Name</GdsSummaryListKey>
+                    <GdsSummaryListValue>Sarah Phillips</GdsSummaryListValue>
+                </GdsSummaryListRow>
+                <GdsSummaryListRow>
+                    <GdsSummaryListKey>Address</GdsSummaryListKey>
+                    <GdsSummaryListValue>72 Guild Street<br>London<br>SE23 6FH</GdsSummaryListValue>
+                </GdsSummaryListRow>
+                <GdsSummaryListRow>
+                    <GdsSummaryListKey>Contact details</GdsSummaryListKey>
+                    <GdsSummaryListValue>
+                        <p>07700 900457</p>
+                        <p>sarah.phillips@example.com</p>
+                    </GdsSummaryListValue>
+                </GdsSummaryListRow>
+            </GdsSummaryList>
+        </GdsGridColumn>
+
+        <GdsGridColumn Width="GdsGridColumnWidth.OneQuarter">
+            <EditForm EditContext="@_editContext" FormName="SummaryListDemo">
+                <DataAnnotationsValidator />
+                <GdsErrorSummary />
+
+                <GdsFormGroup>
+                    <GdsFieldsetGroup LegendTextSize="GdsSize.Medium">
+                        <GdsFieldsetLegend>
+                            <GdsFieldsetHeading Level="2">Options</GdsFieldsetHeading>
+                        </GdsFieldsetLegend>
+
+                        <GdsErrorMessage />
+
+                        <GdsCheckboxes Smaller>
+                            <GdsCheckboxItem>
+                                <GdsInputCheckbox @bind-Value="@_model.NoBorders" />
+                                <GdsCheckboxLabel Text="No borders" />
+                            </GdsCheckboxItem>
+                        </GdsCheckboxes>
+                    </GdsFieldsetGroup>
+                </GdsFormGroup>
+            </EditForm>
+        </GdsGridColumn>
+    </GdsGridRow>
+}
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private SummaryListModel? _model;
+    private EditContext? _editContext;
+
+    protected override void OnInitialized()
+    {
+        if (_model is null)
+        {
+            _model = new();
+            _editContext = new EditContext(_model);
+            _editContext.SetFieldCssClassProvider(new GdsFieldCssClassProvider());
+        }
+    }
+
+    public class SummaryListModel
+    {
+        [GdsFieldErrorClass(GdsFieldTypes.Checkbox)]
+        public bool NoBorders { get; set; }
+    }
+}
