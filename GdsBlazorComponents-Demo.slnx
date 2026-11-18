@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../GdsBlazorComponents/GdsBlazorComponents/GdsBlazorComponents.csproj" />
   <Project Path="GdsBlazorComponents-Demo/GdsBlazorComponents-Demo.csproj" />
 </Solution>
