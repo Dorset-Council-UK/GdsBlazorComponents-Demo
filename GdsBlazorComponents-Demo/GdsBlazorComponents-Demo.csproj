@@ -9,8 +9,14 @@
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
+  <!--
   <ItemGroup>
     <PackageReference Include="Dorset-Council-UK.GdsBlazorComponents" Version="4.3.0" />
+  </ItemGroup>
+  -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GdsBlazorComponents\GdsBlazorComponents\GdsBlazorComponents.csproj" />
   </ItemGroup>
 
 </Project>
